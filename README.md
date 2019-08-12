@@ -28,12 +28,7 @@ You can use all fields from `ListView` but you have to specify three extra field
 
 ```Dart
 Widget _buildGroupSeperator(dynamic groupByValue) {
-  return Column(
-    crossAxisAlignment: CrossAxisAlignment.center,
-    children: <Widget>[
-      Text('$element'),
-    ],
-  );
+  return Text('$groupByValue');
 }
 ```
 The passed parameter is the return value of the defined `groupBy` function for that specific section.
