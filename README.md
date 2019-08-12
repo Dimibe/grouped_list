@@ -22,9 +22,11 @@ A Flutter ListView in which ListItems can be grouped to sections.
 
 You can use all fields from `ListView` but you have to specify three extra fields: 
 
-* The first one is `elements`. Here you need to pass the data you want to group.
-* After that you need to specify the `groupBy` function. All elements which share the same value are displayed in the same section. 
-* Last you need to specify the `groupSeperator`. This is a Widget which is used as an section seperator.
+#### Required Parameters:
+
+* `elements`: A list of the data you want to display in the list.
+* `groupBy`: Function which maps an element to its grouped value. 
+* `groupSeperator`: Function which returns an Widget which is used as an section seperator.
 
 ```Dart
 Widget _buildGroupSeperator(dynamic groupByValue) {
@@ -32,3 +34,10 @@ Widget _buildGroupSeperator(dynamic groupByValue) {
 }
 ```
 The passed parameter is the return value of the defined `groupBy` function for that specific section.
+
+#### Optional Parameters: 
+* `seperator`: A Widget which is used as a seperator between items inside a section. 
+
+### Notic: 
+ The item count is the count of the actual items. Seperators and group seperators do not count in here.
+ The item builder functions only creates the actual list items for the seperator items use the `seperator` parameter.
