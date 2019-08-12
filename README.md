@@ -38,6 +38,6 @@ The passed parameter is the return value of the defined `groupBy` function for t
 #### Optional Parameters: 
 * `seperator`: A Widget which is used as a seperator between items inside a section. 
 
-### Notic: 
+### Notice: 
  The item count is the count of the actual items. Seperators and group seperators do not count in here.
  The item builder functions only creates the actual list items for the seperator items use the `seperator` parameter.
