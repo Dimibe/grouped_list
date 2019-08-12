@@ -4,11 +4,11 @@ import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 
 class GroupedListView<T, E> extends ListView {
-  final Widget seperator;
-  final Widget Function(E element) groupSeperatorBuilder;
-
   GroupedListView.builder({
-    E Function(T groupedElement) groupBy,
+    @required E Function(T element) groupBy,
+    @required Widget Function(E value) groupSeperatorBuilder,
+    @required Widget Function(BuildContext context, T element) itemBuilder,
+    Widget seperator = const Divider(height: 0.0),
     List<T> elements,
     Key key,
     Axis scrollDirection = Axis.vertical,
@@ -19,10 +19,6 @@ class GroupedListView<T, E> extends ListView {
     bool shrinkWrap = false,
     EdgeInsetsGeometry padding,
     double itemExtent,
-    @required IndexedWidgetBuilder itemBuilder,
-    @required this.groupSeperatorBuilder,
-    this.seperator = const Divider(height: 0.0),
-    int itemCount,
     bool addAutomaticKeepAlives = true,
     bool addRepaintBoundaries = true,
     bool addSemanticIndexes = true,
@@ -39,7 +35,7 @@ class GroupedListView<T, E> extends ListView {
           shrinkWrap: shrinkWrap,
           padding: padding,
           itemExtent: itemExtent,
-          itemCount: itemCount * 2,
+          itemCount: elements.length * 2,
           addAutomaticKeepAlives: addAutomaticKeepAlives,
           addRepaintBoundaries: addRepaintBoundaries,
           addSemanticIndexes: addSemanticIndexes,
@@ -59,7 +55,7 @@ class GroupedListView<T, E> extends ListView {
               }
               return seperator;
             }
-            return itemBuilder(context, actualIndex);
+            return itemBuilder(context, elements[actualIndex]);
           },
         );
 }
