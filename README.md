@@ -2,7 +2,7 @@
 
 A Flutter ListView in which ListItems can be grouped to sections.
 
-<img src="./assets/Bildschirmfoto%202019-08-12%20um%2023.07.29.png" width="400">
+<img src="./assets/Bildschirmfoto%202019-08-12%20um%2023.07.29.png" width="300">
 
 ## Getting Started
 
