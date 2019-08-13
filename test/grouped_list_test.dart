@@ -27,7 +27,7 @@ void main() {
           body: GroupedListView(
             groupBy: (element) => element['group'],
             elements: _elements,
-            groupSeperatorBuilder: _buildGroupSeperator,
+            groupSeparatorBuilder: _buildGroupSeperator,
             itemBuilder: (context, element) => Text(element['name']),
           ),
         ),
