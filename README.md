@@ -1,8 +1,8 @@
-# grouped_list
+# Grouped list package for Flutter 
 
-A Flutter ListView in which ListItems can be grouped to sections.
+A Flutter `ListView` in which list items can be grouped to sections.
 
-![alt text](https://raw.githubusercontent.com/Dimibe/grouped_list/master/assets/Bildschirmfoto%202019-08-12%20um%2023.07.29.png "Grouped List")
+<img src="./assets/Bildschirmfoto%202019-08-12%20um%2023.07.29.png" width="300">
 
 ## Getting Started
 
@@ -17,8 +17,7 @@ A Flutter ListView in which ListItems can be grouped to sections.
     elements: _elements,
     groupBy: (element) => element['group'],
     groupSeperatorBuilder: _buildGroupSeperator,
-    itemCount: _elements.length,
-    itemBuilder: (context, i) => Text(_elements[i]['name']),
+    itemBuilder: (context, element) => Text(element['name']),
   ),
 ```
 
@@ -28,8 +27,8 @@ You can use all fields from `ListView` but you have to specify three extra field
 
 * `elements`: A list of the data you want to display in the list.
 * `groupBy`: Function which maps an element to its grouped value. 
-* `groupSeperator`: Function which returns an Widget which is used as an section seperator.
-
+* `groupSeperator`: Function which returns an Widget which defines the section seperator.
+* `itemBuilder`: Function which returns an Widget which defines the item.
 ```Dart
 Widget _buildGroupSeperator(dynamic groupByValue) {
   return Text('$groupByValue');
@@ -38,8 +37,9 @@ Widget _buildGroupSeperator(dynamic groupByValue) {
 The passed parameter is the return value of the defined `groupBy` function for that specific section.
 
 #### Optional Parameters: 
-* `seperator`: A Widget which is used as a seperator between items inside a section. 
+* `seperator`: A Widget which defines a seperator between items inside a section. 
 
 ### Notice: 
- The item count is the count of the actual items. Seperators and group seperators do not count in here.
  The item builder functions only creates the actual list items for the seperator items use the `seperator` parameter.
+ Other than the `itemBuilder` function of the `ListView.builder` constructor the function has an element instead of the index as parameter.
+
