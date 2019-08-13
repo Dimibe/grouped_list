@@ -1,10 +1,11 @@
 library grouped_list;
 
-import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 
 class GroupedListView<T, E> extends ListView {
-  GroupedListView.builder({
+  /// Creates a fixed-length scrollable linear array of list "items" separated
+  /// by list item "separators" and "group separators".
+  GroupedListView({
     @required E Function(T element) groupBy,
     @required Widget Function(E value) groupSeperatorBuilder,
     @required Widget Function(BuildContext context, T element) itemBuilder,
@@ -12,36 +13,28 @@ class GroupedListView<T, E> extends ListView {
     List<T> elements,
     Key key,
     Axis scrollDirection = Axis.vertical,
-    bool reverse = false,
     ScrollController controller,
     bool primary,
     ScrollPhysics physics,
     bool shrinkWrap = false,
     EdgeInsetsGeometry padding,
-    double itemExtent,
     bool addAutomaticKeepAlives = true,
     bool addRepaintBoundaries = true,
     bool addSemanticIndexes = true,
     double cacheExtent,
-    int semanticChildCount,
-    DragStartBehavior dragStartBehavior = DragStartBehavior.start,
   }) : super.builder(
           key: key,
           scrollDirection: scrollDirection,
-          reverse: reverse,
           controller: controller,
           primary: primary,
           physics: physics,
           shrinkWrap: shrinkWrap,
           padding: padding,
-          itemExtent: itemExtent,
           itemCount: elements.length * 2,
           addAutomaticKeepAlives: addAutomaticKeepAlives,
           addRepaintBoundaries: addRepaintBoundaries,
           addSemanticIndexes: addSemanticIndexes,
           cacheExtent: cacheExtent,
-          semanticChildCount: semanticChildCount,
-          dragStartBehavior: dragStartBehavior,
           itemBuilder: (context, index) {
             int actualIndex = index ~/ 2;
             if (index.isEven) {

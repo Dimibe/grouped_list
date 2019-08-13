@@ -24,7 +24,7 @@ void main() {
     await tester.pumpWidget(
       MaterialApp(
         home: Scaffold(
-          body: GroupedListView.builder(
+          body: GroupedListView(
             groupBy: (element) => element['group'],
             elements: _elements,
             groupSeperatorBuilder: _buildGroupSeperator,
