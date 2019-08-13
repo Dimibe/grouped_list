@@ -1,8 +1,8 @@
 name: grouped_list
 description: A ListView in which ListItems can be grouped to sections.
 version: 1.0.0
-author: Dimitrios Begnis
-homepage: github.com/Dimibe
+author: Dimitrios Begnis <dimitribegnis@gmail.com>
+homepage: https://github.com/Dimibe
 
 environment:
   sdk: ">=2.1.0 <3.0.0"
