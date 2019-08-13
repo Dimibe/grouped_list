@@ -29,7 +29,6 @@ You can use all fields from `ListView` but you have to specify three extra field
 * `groupBy`: Function which maps an element to its grouped value. 
 * `groupSeperator`: Function which returns an Widget which defines the section seperator.
 * `itemBuilder`: Function which returns an Widget which defines the item.
-
 ```Dart
 Widget _buildGroupSeperator(dynamic groupByValue) {
   return Text('$groupByValue');
@@ -41,5 +40,6 @@ The passed parameter is the return value of the defined `groupBy` function for t
 * `seperator`: A Widget which defines a seperator between items inside a section. 
 
 ### Notice: 
- The item count is the count of the actual items. Seperators and group seperators do not count in here.
  The item builder functions only creates the actual list items for the seperator items use the `seperator` parameter.
+ Other than the `itemBuilder` function of the `ListView.builder` constructor the function has an element instead of the index as parameter.
+
