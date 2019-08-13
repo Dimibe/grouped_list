@@ -1,4 +1,4 @@
-# grouped_list
+# Grouped list package for Flutter 
 
 A Flutter `ListView` in which list items can be grouped to sections.
 
