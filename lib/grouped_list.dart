@@ -7,9 +7,9 @@ class GroupedListView<T, E> extends ListView {
   /// by list item "separators" and "group separators".
   GroupedListView({
     @required E Function(T element) groupBy,
-    @required Widget Function(E value) groupSeperatorBuilder,
+    @required Widget Function(E value) groupSeparatorBuilder,
     @required Widget Function(BuildContext context, T element) itemBuilder,
-    Widget seperator = const Divider(height: 0.0),
+    Widget separator = const Divider(height: 0.0),
     List<T> elements,
     Key key,
     Axis scrollDirection = Axis.vertical,
@@ -44,9 +44,9 @@ class GroupedListView<T, E> extends ListView {
                   : groupBy(elements[actualIndex - 1]);
 
               if (prev != curr) {
-                return groupSeperatorBuilder(curr);
+                return groupSeparatorBuilder(curr);
               }
-              return seperator;
+              return separator;
             }
             return itemBuilder(context, elements[actualIndex]);
           },
