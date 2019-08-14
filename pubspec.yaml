@@ -1,6 +1,6 @@
 name: grouped_list
 description: A ListView where list items can be grouped into sections. For each section a header can be defined.
-version: 1.0.0
+version: 1.1.0
 author: Dimitrios Begnis <dimitribegnis@gmail.com>
 homepage: https://github.com/Dimibe
 
