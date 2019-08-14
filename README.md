@@ -2,7 +2,7 @@
 
 A Flutter `ListView` in which list items can be grouped to sections.
 
-<img src="./assets/screenshot-for-readme.png" width="300">
+<img src="https://raw.githubusercontent.com/Dimibe/grouped_list/master/assets/screenshot-for-readme.png" width="300">
 
 ## Getting Started
 
