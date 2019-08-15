@@ -3,10 +3,13 @@ import 'package:flutter_test/flutter_test.dart';
 import 'package:grouped_list/grouped_list.dart';
 import 'package:flutter/material.dart';
 
-final _elements = [
-  {'group': 'a', 'name': 'x'},
-  {'group': 'a', 'name': 'y'},
-  {'group': 'b', 'name': 'z'},
+final List _elements = [
+  {'name': 'John', 'group': 'Team A'},
+  {'name': 'Will', 'group': 'Team B'},
+  {'name': 'Beth', 'group': 'Team A'},
+  {'name': 'Miranda', 'group': 'Team B'},
+  {'name': 'Mike', 'group': 'Team C'},
+  {'name': 'Danny', 'group': 'Team C'},
 ];
 
 void main() {
@@ -27,6 +30,7 @@ void main() {
           body: GroupedListView(
             groupBy: (element) => element['group'],
             elements: _elements,
+            sort: true,
             groupSeparatorBuilder: _buildGroupSeperator,
             itemBuilder: (context, element) => Text(element['name']),
           ),
@@ -35,10 +39,10 @@ void main() {
     );
 
     // Find a widget that displays the letter 'H'.
-    expect(find.text('a'), findsOneWidget);
-    expect(find.text('b'), findsOneWidget);
-    expect(find.text('x'), findsOneWidget);
-    expect(find.text('y'), findsOneWidget);
-    expect(find.text('z'), findsOneWidget);
+    expect(find.text('John'), findsOneWidget);
+    expect(find.text('Danny'), findsOneWidget);
+    expect(find.text('Team A'), findsOneWidget);
+    expect(find.text('Team B'), findsOneWidget);
+    expect(find.text('Team C'), findsOneWidget);
   });
 }

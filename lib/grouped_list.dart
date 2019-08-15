@@ -9,6 +9,7 @@ class GroupedListView<T, E> extends ListView {
     @required E Function(T element) groupBy,
     @required Widget Function(E value) groupSeparatorBuilder,
     @required Widget Function(BuildContext context, T element) itemBuilder,
+    bool sort = true,
     Widget separator = const Divider(height: 0.0),
     List<T> elements,
     Key key,
@@ -50,5 +51,15 @@ class GroupedListView<T, E> extends ListView {
             }
             return itemBuilder(context, elements[actualIndex]);
           },
-        );
+        ) {
+    if (sort && elements.isNotEmpty) {
+      if (groupBy(elements[0]) is Comparable) {
+        elements.sort((e1, e2) =>
+            (groupBy(e1) as Comparable).compareTo(groupBy(e2) as Comparable));
+      } else {
+        elements
+            .sort((e1, e2) => ('${groupBy(e1)}').compareTo('${groupBy(e2)}'));
+      }
+    }
+  }
 }

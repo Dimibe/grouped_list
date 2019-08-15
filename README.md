@@ -18,18 +18,19 @@ A Flutter `ListView` in which list items can be grouped to sections.
 import 'package:grouped_list/grouped_list.dart';
  ``` 
  
- Instead of using a `ListView` use `GroupedListView` and create your list with the builder constructor:
+ Instead of using a `ListView` create a `GroupedListView` Widget:
  
  ```Dart
   GroupedListView(
     elements: _elements,
+    sort: true,
     groupBy: (element) => element['group'],
     groupSeparatorBuilder: _buildGroupSeparator,
     itemBuilder: (context, element) => Text(element['name']),
   ),
 ```
 
-You can use all fields from `ListView` but you have to specify three extra fields: 
+You can also use most fields from the `ListView.builder` constructor.
 
 #### Required Parameters:
 
@@ -42,12 +43,14 @@ Widget _buildGroupSeparator(dynamic groupByValue) {
   return Text('$groupByValue');
 }
 ```
-The passed parameter is the return value of the defined `groupBy` function for that specific section.
+The parameter `groupByValue` has the return type of the defined `groupBy` function.
 
 #### Optional Parameters: 
 * `separator`: A Widget which defines a separator between items inside a section. 
+* `sort`: A bool which defines if the passed data should be sorted by the widget. By default it's true.
 
 ### Notice: 
- The item builder functions only creates the actual list items for the seperator items use the `separator` parameter.
- Other than the `itemBuilder` function of the `ListView.builder` constructor the function has an element instead of the index as parameter.
+ * The item builder functions only creates the actual list items. For the seperator items use the `separator` parameter.
+ * Other than the `itemBuilder` function of the `ListView.builder` constructor the function provides the specific element instead of the index as parameter.
+ * The elements need to be sorted according to the `groupBy` return value. The Widgets sorts the elements by default. Disable the sorting only if your list is sorted beforehand.
 

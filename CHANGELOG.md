@@ -7,3 +7,7 @@
 * Added example
 * Edited readme and package description
 
+## [1.2.0] - 15.08.2019
+
+* Widget sort the list elements now according the `groupBy`value. Can be switched off through the parameter `sort`.
+

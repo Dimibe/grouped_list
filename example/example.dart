@@ -5,8 +5,8 @@ void main() => runApp(MyApp());
 
 List _elements = [
   {'name': 'John', 'group': 'Team A'},
-  {'name': 'Beth', 'group': 'Team A'},
   {'name': 'Will', 'group': 'Team B'},
+  {'name': 'Beth', 'group': 'Team A'},
   {'name': 'Miranda', 'group': 'Team B'},
   {'name': 'Mike', 'group': 'Team C'},
   {'name': 'Danny', 'group': 'Team C'},
@@ -25,14 +25,15 @@ class MyApp extends StatelessWidget {
         appBar: AppBar(
           title: Text('Grouped List View Example'),
         ),
-        body: GroupedListView(
+        body: GroupedListView<dynamic, String>(
           groupBy: (element) => element['group'],
           elements: _elements,
-          groupSeparatorBuilder: (value) => Padding(
+          sort: true,
+          groupSeparatorBuilder: (String value) => Padding(
             padding: const EdgeInsets.all(8.0),
             child: Center(
                 child: Text(
-              '$value',
+              value,
               style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
             )),
           ),
