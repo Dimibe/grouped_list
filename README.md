@@ -9,7 +9,7 @@ A Flutter `ListView` in which list items can be grouped to sections.
  Add the package to your pubspec.yaml:
 
  ```yaml
- grouped_list: ^1.0.0
+ grouped_list: ^1.2.1
  ```
  
  In your dart file, import the library:
@@ -23,7 +23,6 @@ import 'package:grouped_list/grouped_list.dart';
  ```Dart
   GroupedListView(
     elements: _elements,
-    sort: true,
     groupBy: (element) => element['group'],
     groupSeparatorBuilder: _buildGroupSeparator,
     itemBuilder: (context, element) => Text(element['name']),
@@ -50,7 +49,7 @@ The parameter `groupByValue` has the return type of the defined `groupBy` functi
 * `sort`: A bool which defines if the passed data should be sorted by the widget. By default it's true.
 
 ### Notice: 
- * The item builder functions only creates the actual list items. For the seperator items use the `separator` parameter.
+ * The item builder functions only creates the actual list items. For seperator items use the `separator` parameter.
  * Other than the `itemBuilder` function of the `ListView.builder` constructor the function provides the specific element instead of the index as parameter.
  * The elements need to be sorted according to the `groupBy` return value. The Widgets sorts the elements by default. Disable the sorting only if your list is sorted beforehand.
 
