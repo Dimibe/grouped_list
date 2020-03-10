@@ -23,10 +23,10 @@ import 'package:grouped_list/grouped_list.dart';
  ```Dart
   GroupedListView(
     elements: _elements,
-    sort: true,
     groupBy: (element) => element['group'],
     groupSeparatorBuilder: _buildGroupSeparator,
     itemBuilder: (context, element) => Text(element['name']),
+    order: GroupedListOrder.ASC,
   ),
 ```
 
@@ -46,6 +46,7 @@ Widget _buildGroupSeparator(dynamic groupByValue) {
 The parameter `groupByValue` has the return type of the defined `groupBy` function.
 
 #### Optional Parameters: 
+* `order`: By default it's GroupedListOrder.ASC. Change to GroupedListOrder.DESC for reversing the group sorting.
 * `separator`: A Widget which defines a separator between items inside a section. 
 * `sort`: A bool which defines if the passed data should be sorted by the widget. By default it's true.
 
