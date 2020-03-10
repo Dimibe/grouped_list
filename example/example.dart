@@ -28,7 +28,7 @@ class MyApp extends StatelessWidget {
         body: GroupedListView<dynamic, String>(
           groupBy: (element) => element['group'],
           elements: _elements,
-          sort: true,
+          order: GroupedListOrder.DESC,
           groupSeparatorBuilder: (String value) => Padding(
             padding: const EdgeInsets.all(8.0),
             child: Center(

@@ -31,6 +31,7 @@ void main() {
             groupBy: (element) => element['group'],
             elements: _elements,
             sort: true,
+            order: GroupedListOrder.DESC,
             groupSeparatorBuilder: _buildGroupSeperator,
             itemBuilder: (context, element) => Text(element['name']),
           ),
