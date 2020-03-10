@@ -14,3 +14,7 @@
 ## [1.2.1] - 18.08.2019
 
 * Improved documentary
+
+## [1.3.0] - 10.03.2020
+
+* Add `order` option to the widget. With this the sorting of the groups can be reversed.
