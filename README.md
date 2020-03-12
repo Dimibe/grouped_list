@@ -4,6 +4,13 @@ A Flutter `ListView` in which list items can be grouped to sections.
 
 <img src="https://raw.githubusercontent.com/Dimibe/grouped_list/master/assets/screenshot-for-readme.png" width="300">
 
+#### Features
+* All fields from `ListView.builder` constructor available.
+* List Items can be separated in groups.
+* For the groups an individual header can be set.
+* Sticky Headers. Option to stick top header at the top.
+* Option to sort the groups.
+
 ## Getting Started
 
  Add the package to your pubspec.yaml:
@@ -46,9 +53,10 @@ Widget _buildGroupSeparator(dynamic groupByValue) {
 The parameter `groupByValue` has the return type of the defined `groupBy` function.
 
 #### Optional Parameters: 
-* `order`: By default it's GroupedListOrder.ASC. Change to GroupedListOrder.DESC for reversing the group sorting.
+* `useStickyGroupSeparators`. If set to true the top `groupSeparator` will stick on top. Default is `false`.
+* `order`: By default it's `GroupedListOrder.ASC`. Change to `GroupedListOrder.DESC` for reversing the group sorting.
 * `separator`: A Widget which defines a separator between items inside a section. 
-* `sort`: A bool which defines if the passed data should be sorted by the widget. By default it's true.
+* `sort`: A bool which defines if the passed data should be sorted by the widget. By default it's `true`.
 
 ### Notice: 
  * The item builder functions only creates the actual list items. For seperator items use the `separator` parameter.

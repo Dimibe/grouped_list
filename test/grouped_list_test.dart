@@ -22,7 +22,7 @@ void main() {
     );
   }
 
-  testWidgets('finds a Text widget', (WidgetTester tester) async {
+  testWidgets('finds elemets and group separators', (WidgetTester tester) async {
     // Build an app with a Text widget that displays the letter 'H'.
     await tester.pumpWidget(
       MaterialApp(
@@ -31,6 +31,7 @@ void main() {
             groupBy: (element) => element['group'],
             elements: _elements,
             sort: true,
+            useStickyGroupSeparators: true,
             order: GroupedListOrder.DESC,
             groupSeparatorBuilder: _buildGroupSeperator,
             itemBuilder: (context, element) => Text(element['name']),
@@ -45,5 +46,40 @@ void main() {
     expect(find.text('Team A'), findsOneWidget);
     expect(find.text('Team B'), findsOneWidget);
     expect(find.text('Team C'), findsOneWidget);
+  });
+
+  testWidgets('empty list', (WidgetTester tester) async {
+    // Build an app with a Text widget that displays the letter 'H'.
+    await tester.pumpWidget(
+      MaterialApp(
+        home: Scaffold(
+          body: GroupedListView(
+            groupBy: (element) => element['group'],
+            elements: [],
+            useStickyGroupSeparators: true,
+            groupSeparatorBuilder: _buildGroupSeperator,
+            itemBuilder: (context, element) => Text(element['name']),
+          ),
+        ),
+      ),
+    );
+  });
+
+  testWidgets('finds only one group separator per group', (WidgetTester tester) async {
+    // Build an app with a Text widget that displays the letter 'H'.
+    await tester.pumpWidget(
+      MaterialApp(
+        home: Scaffold(
+          body: GroupedListView(
+            groupBy: (element) => element['group'],
+            elements: _elements,
+            useStickyGroupSeparators: true,
+            groupSeparatorBuilder: _buildGroupSeperator,
+            itemBuilder: (context, element) => Text(element['name']),
+          ),
+        ),
+      ),
+    );
+    expect(find.text("Team A"), findsOneWidget);
   });
 }

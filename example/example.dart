@@ -29,6 +29,7 @@ class MyApp extends StatelessWidget {
           groupBy: (element) => element['group'],
           elements: _elements,
           order: GroupedListOrder.DESC,
+          useStickyGroupSeparators: true,
           groupSeparatorBuilder: (String value) => Padding(
             padding: const EdgeInsets.all(8.0),
             child: Center(
