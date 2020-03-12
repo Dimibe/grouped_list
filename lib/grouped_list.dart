@@ -57,12 +57,12 @@ class GroupedListView<T, E> extends ListView {
       if (groupBy(elements[0]) is Comparable) {
         elements.sort((e1, e2) =>
             (groupBy(e1) as Comparable).compareTo(groupBy(e2) as Comparable));
-        if (order == GroupedListOrder.DESC) {
-          elements = elements.reversed.toList();
-        }
       } else {
         elements
             .sort((e1, e2) => ('${groupBy(e1)}').compareTo('${groupBy(e2)}'));
+      }
+      if (order == GroupedListOrder.DESC) {
+        elements = elements.reversed.toList();
       }
     }
   }
