@@ -18,3 +18,7 @@
 ## [1.3.0] - 10.03.2020
 
 * Add `order` option to the widget. With this the sorting of the groups can be reversed.
+
+## [1.3.1] - 12.03.2020
+
+* Bugfix: The `order` option also works for groups which aren't comparable.
