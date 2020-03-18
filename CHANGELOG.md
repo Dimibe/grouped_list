@@ -22,3 +22,10 @@
 ## [1.3.1] - 12.03.2020
 
 * Bugfix: The `order` option also works for groups which aren't comparable.
+
+## [2.0.0] - 18.03.2020
+
+* New Feature: Sticky Headers!
+** To use the sticky header set `useStickyGroupSeparators` to `true`.
+** The parameter `elements` is now required.
+* Due to potential beaking changes the feature comes with a new major release.
