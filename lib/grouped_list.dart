@@ -57,12 +57,6 @@ class _GroupedLisdtViewState<T, E> extends State<GroupedListView<T, E>> {
   int _topElementIndex = 0;
 
   @override
-  initState() {
-    super.initState();
-    this._sortedElements = _sortElements();
-  }
-
-  @override
   void dispose() {
     _controller.removeListener(_scrollListener);
     _controller.dispose();
@@ -71,6 +65,7 @@ class _GroupedLisdtViewState<T, E> extends State<GroupedListView<T, E>> {
 
   @override
   Widget build(BuildContext context) {
+    this._sortedElements = _sortElements();
     return Column(
       key: _key,
       children: <Widget>[
