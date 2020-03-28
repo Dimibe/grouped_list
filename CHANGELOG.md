@@ -29,3 +29,8 @@
 ** To use the sticky header set `useStickyGroupSeparators` to `true`.
 ** The parameter `elements` is now required.
 * Due to potential beaking changes the feature comes with a new major release.
+
+## [2.0.1] - 28.03.2020
+
+* Bugfix: If no `separator` was specified a divider was rendered.
+* Bugfix: Adding items dynamically to an existing group led to a new group to be created.
