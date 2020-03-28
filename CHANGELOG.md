@@ -34,3 +34,7 @@
 
 * Bugfix: If no `separator` was specified a divider was rendered.
 * Bugfix: Adding items dynamically to an existing group led to a new group to be created.
+
+## [2.0.2] - 28.03.2020
+
+* Documentation
