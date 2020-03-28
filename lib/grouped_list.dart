@@ -31,7 +31,8 @@ class GroupedListView<T, E> extends StatefulWidget {
     this.order = GroupedListOrder.ASC,
     this.sort = true,
     this.useStickyGroupSeparators = false,
-    this.separator = const Divider(height: 0.0, color: Color.fromRGBO(0, 0, 0, 0)),
+    this.separator =
+        const Divider(height: 0.0, color: Color.fromRGBO(0, 0, 0, 0)),
     this.key,
     this.scrollDirection = Axis.vertical,
     this.controller,
