@@ -54,6 +54,7 @@ class GroupedListView<T, E> extends StatefulWidget {
 class _GroupedLisdtViewState<T, E> extends State<GroupedListView<T, E>> {
   ScrollController _controller;
   Map<String, GlobalKey> _keys = LinkedHashMap<String, GlobalKey>();
+  GlobalKey _groupHeaderKey;
   List<T> _sortedElements = [];
   GlobalKey _key = GlobalKey();
   int _topElementIndex = 0;
@@ -71,7 +72,7 @@ class _GroupedLisdtViewState<T, E> extends State<GroupedListView<T, E>> {
     return Column(
       key: _key,
       children: <Widget>[
-        showFixedGroupHeader(),
+        _showFixedGroupHeader(),
         Expanded(
           child: ListView.builder(
             scrollDirection: widget.scrollDirection,
@@ -131,24 +132,25 @@ class _GroupedLisdtViewState<T, E> extends State<GroupedListView<T, E>> {
   _scrollListener() {
     RenderBox listBox = _key.currentContext.findRenderObject();
     double listPos = listBox.localToGlobal(Offset.zero).dy;
+    RenderBox headerBox = _groupHeaderKey.currentContext.findRenderObject();
+    double headerHeight = headerBox.size.height;
+    double max = double.negativeInfinity;
+    String topItemKey = '0';
     for (var entry in _keys.entries) {
       var key = entry.value;
       if (_isListItemRendered(key)) {
         RenderBox itemBox = key.currentContext.findRenderObject();
-        var itemHeight = itemBox.size.height;
-        double y = itemBox.localToGlobal(Offset(0, -listPos - itemHeight)).dy;
-        if (y <= 0) {
-          setState(() {
-            _topElementIndex = int.parse(entry.key);
-          });
+        double y =
+            itemBox.localToGlobal(Offset(0, -listPos - 2 * headerHeight)).dy;
+        if (y <= 0 && y > max) {
+          topItemKey = entry.key;
+          max = y;
         }
       }
     }
-  }
-
-  bool _isListItemRendered(GlobalKey<State<StatefulWidget>> key) {
-    return key.currentContext != null &&
-        key.currentContext.findRenderObject() != null;
+    setState(() {
+      _topElementIndex = int.parse(topItemKey);
+    });
   }
 
   List<T> _sortElements() {
@@ -168,14 +170,21 @@ class _GroupedLisdtViewState<T, E> extends State<GroupedListView<T, E>> {
     return elements;
   }
 
-  Widget showFixedGroupHeader() {
+  Widget _showFixedGroupHeader() {
+    _groupHeaderKey = GlobalKey();
     if (widget.useStickyGroupSeparators && widget.elements.length > 0) {
       return Container(
+        key: _groupHeaderKey,
         child: widget.groupSeparatorBuilder(
             widget.groupBy(_sortedElements[_topElementIndex])),
       );
     }
     return Container();
+  }
+
+  bool _isListItemRendered(GlobalKey<State<StatefulWidget>> key) {
+    return key.currentContext != null &&
+        key.currentContext.findRenderObject() != null;
   }
 }
 
