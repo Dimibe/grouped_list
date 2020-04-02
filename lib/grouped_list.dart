@@ -1,6 +1,8 @@
 library grouped_list;
 
-import 'package:flutter/material.dart';
+import 'dart:collection';
+
+import 'package:flutter/widgets.dart';
 
 class GroupedListView<T, E> extends StatefulWidget {
   final E Function(T element) groupBy;
@@ -31,8 +33,7 @@ class GroupedListView<T, E> extends StatefulWidget {
     this.order = GroupedListOrder.ASC,
     this.sort = true,
     this.useStickyGroupSeparators = false,
-    this.separator =
-        const Divider(height: 0.0, color: Color.fromRGBO(0, 0, 0, 0)),
+    this.separator = const SizedBox.shrink(),
     this.key,
     this.scrollDirection = Axis.vertical,
     this.controller,
@@ -52,7 +53,7 @@ class GroupedListView<T, E> extends StatefulWidget {
 
 class _GroupedLisdtViewState<T, E> extends State<GroupedListView<T, E>> {
   ScrollController _controller;
-  Map<String, GlobalKey> _keys = Map<String, GlobalKey>();
+  Map<String, GlobalKey> _keys = LinkedHashMap<String, GlobalKey>();
   List<T> _sortedElements = [];
   GlobalKey _key = GlobalKey();
   int _topElementIndex = 0;
@@ -88,19 +89,21 @@ class _GroupedLisdtViewState<T, E> extends State<GroupedListView<T, E>> {
               int actualIndex = index ~/ 2;
               if (index == 0) {
                 if (widget.useStickyGroupSeparators) {
-                  return buildEmptySeparator(actualIndex);
+                  return const SizedBox.shrink();
                 }
-                return _buildGroupSeparator(actualIndex);
+                return widget.groupSeparatorBuilder(
+                    widget.groupBy(_sortedElements[actualIndex]));
               }
               if (index.isEven) {
                 E curr = widget.groupBy(_sortedElements[actualIndex]);
                 E prev = widget.groupBy(_sortedElements[actualIndex - 1]);
                 if (prev != curr) {
-                  return _buildGroupSeparator(actualIndex);
+                  return widget.groupSeparatorBuilder(
+                      widget.groupBy(_sortedElements[actualIndex]));
                 }
                 return widget.separator;
               }
-              return widget.itemBuilder(context, _sortedElements[actualIndex]);
+              return _buildItem(context, actualIndex);
             },
           ),
         ),
@@ -108,19 +111,12 @@ class _GroupedLisdtViewState<T, E> extends State<GroupedListView<T, E>> {
     );
   }
 
-  Widget buildEmptySeparator(int actualIndex) {
-    GlobalKey key = GlobalKey();
-    _keys['$actualIndex'] = key;
-    return Divider(key: key, color: Color.fromARGB(0, 0, 0, 0));
-  }
-
-  Container _buildGroupSeparator(int actualIndex) {
+  Container _buildItem(context, int actualIndex) {
     GlobalKey key = GlobalKey();
     _keys['$actualIndex'] = key;
     return Container(
         key: key,
-        child: widget.groupSeparatorBuilder(
-            widget.groupBy(_sortedElements[actualIndex])));
+        child: widget.itemBuilder(context, _sortedElements[actualIndex]));
   }
 
   ScrollController _getController() {
@@ -137,8 +133,7 @@ class _GroupedLisdtViewState<T, E> extends State<GroupedListView<T, E>> {
     double listPos = listBox.localToGlobal(Offset.zero).dy;
     for (var entry in _keys.entries) {
       var key = entry.value;
-      if (key.currentContext != null &&
-          key.currentContext.findRenderObject() != null) {
+      if (_isListItemRendered(key)) {
         RenderBox itemBox = key.currentContext.findRenderObject();
         var itemHeight = itemBox.size.height;
         double y = itemBox.localToGlobal(Offset(0, -listPos - itemHeight)).dy;
@@ -149,6 +144,11 @@ class _GroupedLisdtViewState<T, E> extends State<GroupedListView<T, E>> {
         }
       }
     }
+  }
+
+  bool _isListItemRendered(GlobalKey<State<StatefulWidget>> key) {
+    return key.currentContext != null &&
+        key.currentContext.findRenderObject() != null;
   }
 
   List<T> _sortElements() {
