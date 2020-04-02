@@ -38,3 +38,7 @@
 ## [2.0.2] - 28.03.2020
 
 * Documentation
+
+## [2.1.0] - 28.03.2020
+
+* Fixed bug where wrong headers are displayed while using sticky headers.
