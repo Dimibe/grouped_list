@@ -156,13 +156,24 @@ class _GroupedLisdtViewState<T, E> extends State<GroupedListView<T, E>> {
   List<T> _sortElements() {
     List<T> elements = widget.elements;
     if (widget.sort && elements.isNotEmpty) {
-      if (widget.groupBy(elements[0]) is Comparable) {
-        elements.sort((e1, e2) => (widget.groupBy(e1) as Comparable)
-            .compareTo(widget.groupBy(e2) as Comparable));
-      } else {
-        elements.sort((e1, e2) =>
-            ('${widget.groupBy(e1)}').compareTo('${widget.groupBy(e2)}'));
-      }
+      elements.sort((e1, e2) {
+        var compareResult;
+        if (widget.groupBy(e1) is Comparable) {
+          compareResult = (widget.groupBy(e1) as Comparable)
+              .compareTo(widget.groupBy(e2) as Comparable);
+        } else {
+          compareResult =
+              ('${widget.groupBy(e1)}').compareTo('${widget.groupBy(e2)}');
+        }
+        if (compareResult == 0) {
+          if (e1 is Comparable) {
+            compareResult = (e1).compareTo(e2);
+          } else {
+            compareResult = ('$e1').compareTo('$e2');
+          }
+        }
+        return compareResult;
+      });
       if (widget.order == GroupedListOrder.DESC) {
         elements = elements.reversed.toList();
       }
