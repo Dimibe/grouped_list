@@ -1,6 +1,6 @@
 name: grouped_list
 description: A ListView where list items can be grouped into sections. With sticky headers.
-version: 2.1.0
+version: 2.2.0
 homepage: https://github.com/Dimibe
 repository: https://github.com/Dimibe/grouped_list
 

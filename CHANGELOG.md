@@ -39,6 +39,11 @@
 
 * Documentation
 
-## [2.1.0] - 28.03.2020
+## [2.1.0] - 02.04.2020
 
 * Fixed bug where wrong headers are displayed while using sticky headers.
+
+## [2.2.0] - 04.04.2020
+
+* Sorting items inside groups according to its comparable implmentation or alphabetical order.
+* Fixed bug where items rendered wrong
