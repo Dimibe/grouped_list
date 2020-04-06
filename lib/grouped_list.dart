@@ -8,6 +8,8 @@ class GroupedListView<T, E> extends StatefulWidget {
   final E Function(T element) groupBy;
   final Widget Function(E value) groupSeparatorBuilder;
   final Widget Function(BuildContext context, T element) itemBuilder;
+  final Widget Function(BuildContext context, T element, int index)
+      indexedItemBuilder;
   final GroupedListOrder order;
   final bool sort;
   final bool useStickyGroupSeparators;
@@ -26,10 +28,11 @@ class GroupedListView<T, E> extends StatefulWidget {
   final double cacheExtent;
 
   GroupedListView({
+    @required this.elements,
     @required this.groupBy,
     @required this.groupSeparatorBuilder,
-    @required this.itemBuilder,
-    @required this.elements,
+    this.itemBuilder,
+    this.indexedItemBuilder,
     this.order = GroupedListOrder.ASC,
     this.sort = true,
     this.useStickyGroupSeparators = false,
@@ -117,7 +120,10 @@ class _GroupedLisdtViewState<T, E> extends State<GroupedListView<T, E>> {
     _keys['$actualIndex'] = key;
     return Container(
         key: key,
-        child: widget.itemBuilder(context, _sortedElements[actualIndex]));
+        child: widget.indexedItemBuilder == null
+            ? widget.itemBuilder(context, _sortedElements[actualIndex])
+            : widget.indexedItemBuilder(
+                context, _sortedElements[actualIndex], actualIndex));
   }
 
   ScrollController _getController() {
