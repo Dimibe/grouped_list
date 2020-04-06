@@ -47,3 +47,7 @@
 
 * Sorting items inside groups according to its comparable implmentation or alphabetical order.
 * Fixed bug where items rendered wrong
+
+## [2.3.0] - 06.04.2020
+
+* New Feature: Indexed item builder. You can now define `indexedItemBuilder` instead of `itemBuilder`. The new method additionally provides the the current index as attribute. 
