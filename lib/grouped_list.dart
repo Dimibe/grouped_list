@@ -65,7 +65,9 @@ class _GroupedLisdtViewState<T, E> extends State<GroupedListView<T, E>> {
   @override
   void dispose() {
     _controller.removeListener(_scrollListener);
-    _controller.dispose();
+    if (widget.controller == null) {
+      _controller.dispose();
+    }
     super.dispose();
   }
 
