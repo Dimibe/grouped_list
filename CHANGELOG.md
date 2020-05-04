@@ -51,3 +51,7 @@
 ## [2.3.0] - 06.04.2020
 
 * New Feature: Indexed item builder. You can now define `indexedItemBuilder` instead of `itemBuilder`. The new method additionally provides the the current index as attribute. 
+
+## [2.3.1] - 04.05.2020
+
+* Bugfix: dispose controller only if not set throgh the widet.   
