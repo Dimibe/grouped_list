@@ -15,6 +15,7 @@ class GroupedListView<T, E> extends StatefulWidget {
   final bool useStickyGroupSeparators;
   final Widget separator;
   final List<T> elements;
+  final bool floatingHeader;
   final Key key;
   final ScrollController controller;
   final Axis scrollDirection;
@@ -37,6 +38,7 @@ class GroupedListView<T, E> extends StatefulWidget {
     this.sort = true,
     this.useStickyGroupSeparators = false,
     this.separator = const SizedBox.shrink(),
+    this.floatingHeader = true,
     this.key,
     this.scrollDirection = Axis.vertical,
     this.controller,
@@ -74,45 +76,42 @@ class _GroupedLisdtViewState<T, E> extends State<GroupedListView<T, E>> {
   @override
   Widget build(BuildContext context) {
     this._sortedElements = _sortElements();
-    return Column(
+    return Stack(
       key: _key,
+      alignment: Alignment.topCenter,
       children: <Widget>[
-        _showFixedGroupHeader(),
-        Expanded(
-          child: ListView.builder(
-            scrollDirection: widget.scrollDirection,
-            controller: _getController(),
-            primary: widget.primary,
-            physics: widget.physics,
-            shrinkWrap: widget.shrinkWrap,
-            padding: widget.padding,
-            itemCount: _sortedElements.length * 2,
-            addAutomaticKeepAlives: widget.addAutomaticKeepAlives,
-            addRepaintBoundaries: widget.addRepaintBoundaries,
-            addSemanticIndexes: widget.addSemanticIndexes,
-            cacheExtent: widget.cacheExtent,
-            itemBuilder: (context, index) {
-              int actualIndex = index ~/ 2;
-              if (index == 0) {
-                if (widget.useStickyGroupSeparators) {
-                  return const SizedBox.shrink();
-                }
+        ListView.builder(
+          key: widget.key,
+          scrollDirection: widget.scrollDirection,
+          controller: _getController(),
+          primary: widget.primary,
+          physics: widget.physics,
+          shrinkWrap: widget.shrinkWrap,
+          padding: widget.padding,
+          itemCount: _sortedElements.length * 2,
+          addAutomaticKeepAlives: widget.addAutomaticKeepAlives,
+          addRepaintBoundaries: widget.addRepaintBoundaries,
+          addSemanticIndexes: widget.addSemanticIndexes,
+          cacheExtent: widget.cacheExtent,
+          itemBuilder: (context, index) {
+            int actualIndex = index ~/ 2;
+            if (index == 0) {
+              return widget.groupSeparatorBuilder(
+                  widget.groupBy(_sortedElements[actualIndex]));
+            }
+            if (index.isEven) {
+              E curr = widget.groupBy(_sortedElements[actualIndex]);
+              E prev = widget.groupBy(_sortedElements[actualIndex - 1]);
+              if (prev != curr) {
                 return widget.groupSeparatorBuilder(
                     widget.groupBy(_sortedElements[actualIndex]));
               }
-              if (index.isEven) {
-                E curr = widget.groupBy(_sortedElements[actualIndex]);
-                E prev = widget.groupBy(_sortedElements[actualIndex - 1]);
-                if (prev != curr) {
-                  return widget.groupSeparatorBuilder(
-                      widget.groupBy(_sortedElements[actualIndex]));
-                }
-                return widget.separator;
-              }
-              return _buildItem(context, actualIndex);
-            },
-          ),
+              return widget.separator;
+            }
+            return _buildItem(context, actualIndex);
+          },
         ),
+        _showFixedGroupHeader(),
       ],
     );
   }
@@ -194,6 +193,8 @@ class _GroupedLisdtViewState<T, E> extends State<GroupedListView<T, E>> {
     if (widget.useStickyGroupSeparators && widget.elements.length > 0) {
       return Container(
         key: _groupHeaderKey,
+        color: widget.floatingHeader ? null : Color(0xffF7F7F7),
+        width: widget.floatingHeader ? null : MediaQuery.of(context).size.width,
         child: widget.groupSeparatorBuilder(
             widget.groupBy(_sortedElements[_topElementIndex])),
       );
