@@ -96,8 +96,11 @@ class _GroupedLisdtViewState<T, E> extends State<GroupedListView<T, E>> {
           itemBuilder: (context, index) {
             int actualIndex = index ~/ 2;
             if (index == 0) {
-              return widget.groupSeparatorBuilder(
-                  widget.groupBy(_sortedElements[actualIndex]));
+              return Opacity(
+                opacity: widget.useStickyGroupSeparators ? 0 : 1,
+                child: widget.groupSeparatorBuilder(
+                    widget.groupBy(_sortedElements[actualIndex])),
+              );
             }
             if (index.isEven) {
               E curr = widget.groupBy(_sortedElements[actualIndex]);
