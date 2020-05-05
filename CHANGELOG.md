@@ -55,3 +55,9 @@
 ## [2.3.1] - 04.05.2020
 
 * Bugfix: dispose controller only if not set throgh the widet.   
+
+## [3.0.0] - 05.05.2020
+
+* New Feature: Floating Header - Sticky Headers can now float over the list. Set `floatingHeader` to `true`. 
+* Sticky Headers now by default active. Can be disabled by setting `useStickyGroupSeparators` to `false`. 
+* Bugfix: The Widget can now be used in `SliverChildListDelegate`.

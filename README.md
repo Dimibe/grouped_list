@@ -1,22 +1,22 @@
-# Grouped list package for Flutter 
-
-A Flutter `ListView` in which list items can be grouped to sections.
+# Grouped list package for Flutter. With sticky Headers
+ 
+A List with Sticky Headers!
+Basically a flutter `ListView` in which list items can be grouped to sections.
 
 <img src="https://raw.githubusercontent.com/Dimibe/grouped_list/master/assets/screenshot-for-readme.png" width="300">
 
 #### Features
-* All fields from `ListView.builder` constructor available.
 * List Items can be separated in groups.
 * For the groups an individual header can be set.
-* Sticky Headers. Option to stick top header at the top.
-* Option to sort the groups.
+* Sticky Headers. With Floating Option. 
+* Almost all fields from `ListView.builder` constructor available.
 
 ## Getting Started
 
  Add the package to your pubspec.yaml:
 
  ```yaml
- grouped_list: ^2.3.1
+ grouped_list: ^3.0.0
  ```
  
  In your dart file, import the library:
@@ -49,9 +49,12 @@ You can also use most fields from the `ListView.builder` constructor.
   return Text('$groupByValue');
   }
 ```  
-* `useStickyGroupSeparators`. If set to true the top `groupSeparator` will stick on top. Default is `false`.
-* `order`: By default it's `GroupedListOrder.ASC`. Change to `GroupedListOrder.DESC` for reversing the group sorting.
 * `separator`: A Widget which defines a separator between items inside a section.
+* `order`: By default it's `GroupedListOrder.ASC`. Change to `GroupedListOrder.DESC` for reversing the group sorting.
+* `useStickyGroupSeparators`. If set to true the top `groupSeparator` will stick on top. Default is `true`.
+
+### New Feature: 
+* Sticky Headers can now float above the list. Just set the option `floatingHeader` to `true`. 
 
 ##### Notice: 
  * The item builder functions only creates the actual list items. For seperator items use the `separator` parameter.
