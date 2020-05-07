@@ -53,10 +53,10 @@ class GroupedListView<T, E> extends StatefulWidget {
   }) : super(key: key);
 
   @override
-  State<StatefulWidget> createState() => _GroupedLisdtViewState<T, E>();
+  State<StatefulWidget> createState() => _GroupedListViewState<T, E>();
 }
 
-class _GroupedLisdtViewState<T, E> extends State<GroupedListView<T, E>> {
+class _GroupedListViewState<T, E> extends State<GroupedListView<T, E>> {
   ScrollController _controller;
   Map<String, GlobalKey> _keys = LinkedHashMap<String, GlobalKey>();
   GlobalKey _groupHeaderKey;
