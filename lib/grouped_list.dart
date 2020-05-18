@@ -172,7 +172,7 @@ class _GroupedListViewState<T, E> extends State<GroupedListView<T, E>> {
           compareResult = (widget.groupBy(e1) as Comparable)
               .compareTo(widget.groupBy(e2) as Comparable);
         }
-        if (compareResult == 0 && e1 is Comparable) {
+        if ((compareResult == null || compareResult == 0) && e1 is Comparable) {
           compareResult = (e1).compareTo(e2);
         }
         return compareResult;
