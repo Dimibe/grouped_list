@@ -61,3 +61,8 @@
 * New Feature: Floating Header - Sticky Headers can now float over the list. Set `floatingHeader` to `true`. 
 * Sticky Headers now by default active. Can be disabled by setting `useStickyGroupSeparators` to `false`. 
 * Bugfix: The Widget can now be used in `SliverChildListDelegate`.
+
+## [3.0.1] - 18.05.2020
+
+* Bugfix: error when groupby value not comparable. 
+* Bugfix: only set state when needed.
