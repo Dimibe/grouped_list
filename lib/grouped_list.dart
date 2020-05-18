@@ -158,9 +158,11 @@ class _GroupedListViewState<T, E> extends State<GroupedListView<T, E>> {
         }
       }
     }
-    setState(() {
-      _topElementIndex = int.parse(topItemKey);
-    });
+    if (int.parse(topItemKey) != _topElementIndex) {
+      setState(() {
+        _topElementIndex = int.parse(topItemKey);
+      });
+    }
   }
 
   List<T> _sortElements() {
