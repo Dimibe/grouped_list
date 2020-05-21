@@ -16,7 +16,7 @@ Basically a flutter `ListView` in which list items can be grouped to sections.
  Add the package to your pubspec.yaml:
 
  ```yaml
- grouped_list: ^3.0.1
+ grouped_list: ^3.1.0
  ```
  
  In your dart file, import the library:

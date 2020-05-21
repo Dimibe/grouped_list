@@ -66,3 +66,7 @@
 
 * Bugfix: error when groupby value not comparable. 
 * Bugfix: only set state when needed.
+
+## [3.1.0] - 21.05.2020
+
+* Sticky Headers now by default disabled.
