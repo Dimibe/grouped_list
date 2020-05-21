@@ -36,7 +36,7 @@ class GroupedListView<T, E> extends StatefulWidget {
     this.indexedItemBuilder,
     this.order = GroupedListOrder.ASC,
     this.sort = true,
-    this.useStickyGroupSeparators = true,
+    this.useStickyGroupSeparators = false,
     this.separator = const SizedBox.shrink(),
     this.floatingHeader = false,
     this.key,
