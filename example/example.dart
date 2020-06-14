@@ -32,11 +32,11 @@ class MyApp extends StatelessWidget {
           useStickyGroupSeparators: true,
           groupSeparatorBuilder: (String value) => Padding(
             padding: const EdgeInsets.all(8.0),
-            child: Center(
-                child: Text(
+            child: Text(
               value,
+              textAlign: TextAlign.center,
               style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
-            )),
+            ),
           ),
           itemBuilder: (c, element) {
             return Card(
