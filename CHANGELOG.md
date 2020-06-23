@@ -70,3 +70,7 @@
 ## [3.1.0] - 21.05.2020
 
 * Sticky Headers now by default disabled.
+
+## [3.2.0] - 23.06.2020
+
+* Fixed performance issue when sticky group headers are actived. Widget now rebuilds only when necessary
