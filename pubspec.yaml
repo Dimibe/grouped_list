@@ -1,7 +1,8 @@
 name: grouped_list
-description: A ListView where list items can be grouped into sections. With sticky headers.
+description: A Flutter ListView where the list items can be grouped into sections.
 version: 3.2.0
-homepage: https://github.com/Dimibe
+author: Dimitrios Begnis
+homepage: https://begnis.dev
 repository: https://github.com/Dimibe/grouped_list
 
 environment:

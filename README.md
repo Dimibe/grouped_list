@@ -1,15 +1,13 @@
-# Grouped list package for Flutter. With sticky Headers
+# Grouped list package for Flutter. 
  
-A List with Sticky Headers!
-Basically a flutter `ListView` in which list items can be grouped to sections.
+A flutter `ListView` in which list items can be grouped to sections.
 
 <img src="https://raw.githubusercontent.com/Dimibe/grouped_list/master/assets/screenshot-for-readme.png" width="300">
 
 #### Features
 * List Items can be separated in groups.
 * For the groups an individual header can be set.
-* Sticky Headers. With Floating Option. 
-* Almost all fields from `ListView.builder` constructor available.
+* Almost all fields from `ListView.builder` available.
 
 ## Getting Started
 
@@ -28,34 +26,28 @@ import 'package:grouped_list/grouped_list.dart';
  Instead of using a `ListView` create a `GroupedListView` Widget:
  
  ```Dart
-  GroupedListView(
+  GroupedListView<dynamic, String>(
     elements: _elements,
     groupBy: (element) => element['group'],
-    groupSeparatorBuilder: _buildGroupSeparator,
-    itemBuilder: (context, element) => Text(element['name']),
+    groupSeparatorBuilder: (String groupByValue) => Text(groupByValue),
+    itemBuilder: (context, dynamic element) => Text(element['name']),
     order: GroupedListOrder.ASC,
   ),
 ```
 
-You can also use most fields from the `ListView.builder` constructor.
-
 ### Parameters:
-* `elements`: A list of the data you want to display in the list (required).
-* `groupBy`: Function which maps an element to its grouped value (required). 
-* `itemBuilder` or `indexedItemBuilder`: Function which returns an Widget which defines the item. `indexedItemBuilder` provides the current index as well. If both are defined `indexedItemBuilder` is preferred.
-* `groupSeparator`: Function which returns an Widget which defines the section separator (required).  
-```Dart
-  Widget _buildGroupSeparator(dynamic groupByValue) {
-  return Text('$groupByValue');
-  }
-```  
-* `separator`: A Widget which defines a separator between items inside a section.
-* `order`: By default it's `GroupedListOrder.ASC`. Change to `GroupedListOrder.DESC` for reversing the group sorting.
-* `useStickyGroupSeparators`. If set to true the top `groupSeparator` will stick on top. Default is `true`.
+| Name | Description | Required | Default value |
+|----|----|----|----|
+|`elements`| A list of the data you want to display in the list | required | - |
+|`groupBy` |Function which maps an element to its grouped value | required | - |
+|`itemBuilder` / `indexedItemBuilder`| Function which returns an Widget which defines the item. `indexedItemBuilder` provides the current index as well. If both are defined `indexedItemBuilder` is preferred| yes, either of them | - |
+|`groupSeparatorBuilder`| Function which gets the `groupBy`-value and returns an Widget which defines the group header separator | required | - |
+|`separator` | A Widget which defines a separator between items inside a group | no | no separator |
+| `order` | Change to `GroupedListOrder.DESC` to reverse the group sorting | no | `GroupedListOrder.ASC` |
 
-### New Feature: 
-* Sticky Headers can now float above the list. Just set the option `floatingHeader` to `true`. 
+You can also use most fields from the `ListView.builder` constructor. 
 
-##### Notice: 
- * The item builder functions only creates the actual list items. For seperator items use the `separator` parameter.
- * Other than the `itemBuilder` function of the `ListView.builder` constructor the function provides the specific element instead of the index as parameter.
+
+### Other packages : 
+Check out my other package [StickyGroupedList](https://pub.dev/packages/sticky_grouped_list), which is based on the [scrollable_positioned_list](https://pub.dev/packages/scrollable_positioned_list) and comes with sticky headers!
+
