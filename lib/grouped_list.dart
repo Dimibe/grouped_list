@@ -62,7 +62,9 @@ class _GroupedListViewState<T, E> extends State<GroupedListView<T, E>> {
   GlobalKey _groupHeaderKey;
   List<T> _sortedElements = [];
   GlobalKey _key = GlobalKey();
-  int _topElementIndex = 0;
+  E _topElementIndex;
+  RenderBox headerBox;
+  RenderBox listBox;
 
   @override
   void dispose() {
@@ -140,10 +142,10 @@ class _GroupedListViewState<T, E> extends State<GroupedListView<T, E>> {
   }
 
   _scrollListener() {
-    RenderBox listBox = _key.currentContext.findRenderObject();
-    double listPos = listBox.localToGlobal(Offset.zero).dy;
-    RenderBox headerBox = _groupHeaderKey.currentContext.findRenderObject();
-    double headerHeight = headerBox.size.height;
+    listBox ??= _key?.currentContext?.findRenderObject();
+    double listPos = listBox?.localToGlobal(Offset.zero)?.dy ?? 0;
+    headerBox ??= _groupHeaderKey?.currentContext?.findRenderObject();
+    double headerHeight = headerBox?.size?.height ?? 0;
     double max = double.negativeInfinity;
     String topItemKey = '0';
     for (var entry in _keys.entries) {
@@ -158,10 +160,14 @@ class _GroupedListViewState<T, E> extends State<GroupedListView<T, E>> {
         }
       }
     }
-    if (int.parse(topItemKey) != _topElementIndex) {
-      setState(() {
-        _topElementIndex = int.parse(topItemKey);
-      });
+    var index = int.parse(topItemKey);
+    if (index != _topElementIndex) {
+      E curr = widget.groupBy(_sortedElements[index]);
+      if (_topElementIndex != curr) {
+        setState(() {
+          _topElementIndex = curr;
+        });
+      }
     }
   }
 
@@ -189,12 +195,12 @@ class _GroupedListViewState<T, E> extends State<GroupedListView<T, E>> {
   Widget _showFixedGroupHeader() {
     _groupHeaderKey = GlobalKey();
     if (widget.useStickyGroupSeparators && widget.elements.length > 0) {
+      _topElementIndex ??= widget.groupBy(_sortedElements[0]);
       return Container(
         key: _groupHeaderKey,
         color: widget.floatingHeader ? null : Color(0xffF7F7F7),
         width: widget.floatingHeader ? null : MediaQuery.of(context).size.width,
-        child: widget.groupSeparatorBuilder(
-            widget.groupBy(_sortedElements[_topElementIndex])),
+        child: widget.groupSeparatorBuilder(_topElementIndex),
       );
     }
     return Container();
