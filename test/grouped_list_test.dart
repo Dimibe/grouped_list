@@ -45,7 +45,7 @@ void main() {
     expect(find.text('Danny'), findsOneWidget);
     expect(find.text('Team A'), findsOneWidget);
     expect(find.text('Team B'), findsOneWidget);
-    expect(find.text('Team C'), findsOneWidget);
+    expect(find.text('Team C'), findsWidgets);
   });
 
   testWidgets('empty list', (WidgetTester tester) async {
@@ -80,6 +80,6 @@ void main() {
         ),
       ),
     );
-    expect(find.text("Team A"), findsOneWidget);
+    expect(find.text("Team B"), findsOneWidget);
   });
 }
