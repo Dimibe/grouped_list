@@ -1,3 +1,5 @@
+[![Pub](https://img.shields.io/pub/v/grouped_list.svg)](https://pub.dev/packages/grouped_list)
+
 # Grouped list package for Flutter. 
  
 A flutter `ListView` in which list items can be grouped to sections.
