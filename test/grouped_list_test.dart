@@ -22,7 +22,8 @@ void main() {
     );
   }
 
-  testWidgets('finds elemets and group separators', (WidgetTester tester) async {
+  testWidgets('finds elemets and group separators',
+      (WidgetTester tester) async {
     // Build an app with a Text widget that displays the letter 'H'.
     await tester.pumpWidget(
       MaterialApp(
@@ -65,7 +66,8 @@ void main() {
     );
   });
 
-  testWidgets('finds only one group separator per group', (WidgetTester tester) async {
+  testWidgets('finds only one group separator per group',
+      (WidgetTester tester) async {
     // Build an app with a Text widget that displays the letter 'H'.
     await tester.pumpWidget(
       MaterialApp(
