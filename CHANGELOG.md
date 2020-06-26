@@ -79,3 +79,7 @@
 
 * Improved documentation
 * Improved example
+
+## [3.2.2] - 26.06.2020
+
+* Fixed readme
