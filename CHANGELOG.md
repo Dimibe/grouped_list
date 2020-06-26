@@ -74,3 +74,8 @@
 ## [3.2.0] - 23.06.2020
 
 * Fixed performance issue when sticky group headers are actived. Widget now rebuilds only when necessary
+
+## [3.2.1] - 26.06.2020
+
+* Improved documentation
+* Improved example
