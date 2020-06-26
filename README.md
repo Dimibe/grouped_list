@@ -1,4 +1,5 @@
 [![Pub](https://img.shields.io/pub/v/grouped_list.svg)](https://pub.dev/packages/grouped_list)
+![CI](https://github.com/Dimibe/grouped_list/workflows/CI/badge.svg?branch=master)
 
 # Grouped list package for Flutter. 
  
