@@ -4,30 +4,104 @@ import 'dart:collection';
 
 import 'package:flutter/widgets.dart';
 
+/// A groupable list of widgets similar to [ListView], execpt that the
+/// items can be sectioned into groups.
+///
+/// See [ListView.builder]
 class GroupedListView<T, E> extends StatefulWidget {
+  final Key key;
+
+  /// Items of which [itemBuilder] or [indexedItemBuilder] produce the list.
+  final List<T> elements;
+
+  /// Defines which elements are grouped together.
+  ///
+  /// Function is called for each element, when equal for two elements, those two belong the same group.
   final E Function(T element) groupBy;
+
+  /// Called to build group separators for each group.
+  /// value is always the groupBy result from the first element of the group.
   final Widget Function(E value) groupSeparatorBuilder;
+
+  /// Called to build children for the list with
+  /// 0 <= element < elements.length.
   final Widget Function(BuildContext context, T element) itemBuilder;
+
+  /// Called to build children for the list with
+  /// 0 <= element, index < elements.length
   final Widget Function(BuildContext context, T element, int index)
       indexedItemBuilder;
+
+  /// Whether the view scrolls in the reading direction.
+  ///
+  /// Defaults to ASC.
   final GroupedListOrder order;
+
+  /// Whether the elements will be sorted or not. IF not it must be done manually.
+  ///
+  /// Defauts to true.
   final bool sort;
+
+  /// When set to true the group header of the current visible group will stick on top.
   final bool useStickyGroupSeparators;
+
+  /// Called to build separators for between each item in the list.
   final Widget separator;
-  final List<T> elements;
+
+  /// Whether the group headers float over the list or occupy their own space.
   final bool floatingHeader;
-  final Key key;
+
+  /// An object that can be used to control the position to which this scroll view is scrolled.
+  ///
+  /// See [ScrollView.controller]
   final ScrollController controller;
+
+  /// The axis along which the scroll view scrolls.
+  ///
+  /// Defaults to [Axis.vertical].
   final Axis scrollDirection;
+
+  /// Whether this is the primary scroll view associated with the parent
+  /// [PrimaryScrollController].
+  ///
+  /// See [ScrollView.primary]
   final bool primary;
+
+  /// How the scroll view should respond to user input.
+  ///
+  /// See [ScrollView.physics].
   final ScrollPhysics physics;
+
+  /// Whether the extent of the scroll view in the [scrollDirection] should be
+  /// determined by the contents being viewed.
+  ///
+  /// See [ScrollView.shrinkWrap]
   final bool shrinkWrap;
+
+  /// The amount of space by which to inset the children.
   final EdgeInsetsGeometry padding;
+
+  /// Whether to wrap each child in an [AutomaticKeepAlive].
+  ///
+  /// See [SliverChildBuilderDelegate.addAutomaticKeepAlives].
   final bool addAutomaticKeepAlives;
+
+  /// Whether to wrap each child in a [RepaintBoundary].
+  ///
+  /// See [SliverChildBuilderDelegate.addRepaintBoundaries].
   final bool addRepaintBoundaries;
+
+  /// Whether to wrap each child in an [IndexedSemantics].
+  ///
+  /// See [SliverChildBuilderDelegate.addSemanticIndexes].
   final bool addSemanticIndexes;
+
+  /// Creates a scrollable, linear array of widgets that are created on demand.
+  ///
+  /// See [ScrollView.cacheExtent]
   final double cacheExtent;
 
+  /// Creates a [GroupedListView]
   GroupedListView({
     @required this.elements,
     @required this.groupBy,
@@ -212,4 +286,5 @@ class _GroupedListViewState<T, E> extends State<GroupedListView<T, E>> {
   }
 }
 
+/// Used to define the order of a [GroupedListView].
 enum GroupedListOrder { ASC, DESC }

@@ -47,7 +47,7 @@ import 'package:grouped_list/grouped_list.dart';
 |`separator` | A Widget which defines a separator between items inside a group | no | no separator |
 | `order` | Change to `GroupedListOrder.DESC` to reverse the group sorting | no | `GroupedListOrder.ASC` |
 
-You can also use most fields from the `ListView.builder` constructor. 
+**Also the fields from `ListView.builder` can be used.** 
 
 
 ### Other packages : 
