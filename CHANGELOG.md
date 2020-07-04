@@ -83,3 +83,7 @@
 ## [3.2.2] - 26.06.2020
 
 * Fixed readme
+
+## [3.2.3] - 04.07.2020
+
+* Add code documentation
