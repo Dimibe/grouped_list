@@ -1,5 +1,6 @@
 library grouped_list;
 
+import 'dart:async';
 import 'dart:collection';
 
 import 'package:flutter/widgets.dart';
@@ -16,7 +17,8 @@ class GroupedListView<T, E> extends StatefulWidget {
 
   /// Defines which elements are grouped together.
   ///
-  /// Function is called for each element, when equal for two elements, those two belong the same group.
+  /// Function is called for each element, when equal for two elements, those
+  /// two belong the same group.
   final E Function(T element) groupBy;
 
   /// Called to build group separators for each group.
@@ -37,12 +39,14 @@ class GroupedListView<T, E> extends StatefulWidget {
   /// Defaults to ASC.
   final GroupedListOrder order;
 
-  /// Whether the elements will be sorted or not. IF not it must be done manually.
+  /// Whether the elements will be sorted or not. IF not it must be done
+  ///  manually.
   ///
   /// Defauts to true.
   final bool sort;
 
-  /// When set to true the group header of the current visible group will stick on top.
+  /// When set to true the group header of the current visible group will stick
+  ///  on top.
   final bool useStickyGroupSeparators;
 
   /// Called to build separators for between each item in the list.
@@ -51,7 +55,8 @@ class GroupedListView<T, E> extends StatefulWidget {
   /// Whether the group headers float over the list or occupy their own space.
   final bool floatingHeader;
 
-  /// An object that can be used to control the position to which this scroll view is scrolled.
+  /// An object that can be used to control the position to which this scroll
+  /// view is scrolled.
   ///
   /// See [ScrollView.controller]
   final ScrollController controller;
@@ -131,14 +136,15 @@ class GroupedListView<T, E> extends StatefulWidget {
 }
 
 class _GroupedListViewState<T, E> extends State<GroupedListView<T, E>> {
+  StreamController<E> _streamController = StreamController<E>();
   ScrollController _controller;
   Map<String, GlobalKey> _keys = LinkedHashMap<String, GlobalKey>();
   GlobalKey _groupHeaderKey;
   List<T> _sortedElements = [];
   GlobalKey _key = GlobalKey();
   E _topElementIndex;
-  RenderBox headerBox;
-  RenderBox listBox;
+  RenderBox _headerBox;
+  RenderBox _listBox;
 
   @override
   void dispose() {
@@ -146,6 +152,7 @@ class _GroupedListViewState<T, E> extends State<GroupedListView<T, E>> {
     if (widget.controller == null) {
       _controller.dispose();
     }
+    _streamController.close();
     super.dispose();
   }
 
@@ -190,7 +197,11 @@ class _GroupedListViewState<T, E> extends State<GroupedListView<T, E>> {
             return _buildItem(context, actualIndex);
           },
         ),
-        _showFixedGroupHeader(),
+        StreamBuilder<E>(
+          stream: _streamController.stream,
+          initialData: _topElementIndex,
+          builder: (context, snapshot) => _showFixedGroupHeader(snapshot.data),
+        ),
       ],
     );
   }
@@ -216,10 +227,10 @@ class _GroupedListViewState<T, E> extends State<GroupedListView<T, E>> {
   }
 
   _scrollListener() {
-    listBox ??= _key?.currentContext?.findRenderObject();
-    double listPos = listBox?.localToGlobal(Offset.zero)?.dy ?? 0;
-    headerBox ??= _groupHeaderKey?.currentContext?.findRenderObject();
-    double headerHeight = headerBox?.size?.height ?? 0;
+    _listBox ??= _key?.currentContext?.findRenderObject();
+    double listPos = _listBox?.localToGlobal(Offset.zero)?.dy ?? 0;
+    _headerBox ??= _groupHeaderKey?.currentContext?.findRenderObject();
+    double headerHeight = _headerBox?.size?.height ?? 0;
     double max = double.negativeInfinity;
     String topItemKey = '0';
     for (var entry in _keys.entries) {
@@ -238,9 +249,8 @@ class _GroupedListViewState<T, E> extends State<GroupedListView<T, E>> {
     if (index != _topElementIndex) {
       E curr = widget.groupBy(_sortedElements[index]);
       if (_topElementIndex != curr) {
-        setState(() {
-          _topElementIndex = curr;
-        });
+        _topElementIndex = curr;
+        _streamController.add(_topElementIndex);
       }
     }
   }
@@ -266,15 +276,15 @@ class _GroupedListViewState<T, E> extends State<GroupedListView<T, E>> {
     return elements;
   }
 
-  Widget _showFixedGroupHeader() {
+  Widget _showFixedGroupHeader(E topElementIndex) {
     _groupHeaderKey = GlobalKey();
     if (widget.useStickyGroupSeparators && widget.elements.length > 0) {
-      _topElementIndex ??= widget.groupBy(_sortedElements[0]);
+      topElementIndex ??= widget.groupBy(_sortedElements[0]);
       return Container(
         key: _groupHeaderKey,
         color: widget.floatingHeader ? null : Color(0xffF7F7F7),
         width: widget.floatingHeader ? null : MediaQuery.of(context).size.width,
-        child: widget.groupSeparatorBuilder(_topElementIndex),
+        child: widget.groupSeparatorBuilder(topElementIndex),
       );
     }
     return Container();
