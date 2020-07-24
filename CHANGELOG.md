@@ -87,3 +87,7 @@
 ## [3.2.3] - 04.07.2020
 
 * Add code documentation
+
+## [3.3.0] - 24.07.2020
+
+* Fix performance issue: Don't rebuild widget when sticky header changes.
