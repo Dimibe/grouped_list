@@ -22,8 +22,17 @@ class GroupedListView<T, E> extends StatefulWidget {
   final E Function(T element) groupBy;
 
   /// Called to build group separators for each group.
-  /// value is always the groupBy result from the first element of the group.
+  /// Value is always the groupBy result from the first element of the group.
+  ///
+  /// Will be ignored if [groupHeaderBuilder] is used.
   final Widget Function(E value) groupSeparatorBuilder;
+
+  /// Same as [groupSeparatorBuilder], will be called to build group separators
+  /// for each group.
+  /// The passed element is always the first element of the group.
+  ///
+  /// If defined [groupSeparatorBuilder] wont be used.
+  final Widget Function(T element) groupHeaderBuilder;
 
   /// Called to build children for the list with
   /// 0 <= element < elements.length.
@@ -110,7 +119,8 @@ class GroupedListView<T, E> extends StatefulWidget {
   GroupedListView({
     @required this.elements,
     @required this.groupBy,
-    @required this.groupSeparatorBuilder,
+    this.groupSeparatorBuilder,
+    this.groupHeaderBuilder,
     this.itemBuilder,
     this.indexedItemBuilder,
     this.order = GroupedListOrder.ASC,
@@ -136,13 +146,13 @@ class GroupedListView<T, E> extends StatefulWidget {
 }
 
 class _GroupedListViewState<T, E> extends State<GroupedListView<T, E>> {
-  StreamController<E> _streamController = StreamController<E>();
+  StreamController<int> _streamController = StreamController<int>();
   ScrollController _controller;
   Map<String, GlobalKey> _keys = LinkedHashMap<String, GlobalKey>();
   GlobalKey _groupHeaderKey;
   List<T> _sortedElements = [];
   GlobalKey _key = GlobalKey();
-  E _topElementIndex;
+  int _topElementIndex = 0;
   RenderBox _headerBox;
   RenderBox _listBox;
 
@@ -181,23 +191,21 @@ class _GroupedListViewState<T, E> extends State<GroupedListView<T, E>> {
             if (index == 0) {
               return Opacity(
                 opacity: widget.useStickyGroupSeparators ? 0 : 1,
-                child: widget.groupSeparatorBuilder(
-                    widget.groupBy(_sortedElements[actualIndex])),
+                child: _buildGroupSeparator(_sortedElements[actualIndex]),
               );
             }
             if (index.isEven) {
               E curr = widget.groupBy(_sortedElements[actualIndex]);
               E prev = widget.groupBy(_sortedElements[actualIndex - 1]);
               if (prev != curr) {
-                return widget.groupSeparatorBuilder(
-                    widget.groupBy(_sortedElements[actualIndex]));
+                return _buildGroupSeparator(_sortedElements[actualIndex]);
               }
               return widget.separator;
             }
             return _buildItem(context, actualIndex);
           },
         ),
-        StreamBuilder<E>(
+        StreamBuilder<int>(
           stream: _streamController.stream,
           initialData: _topElementIndex,
           builder: (context, snapshot) => _showFixedGroupHeader(snapshot.data),
@@ -248,8 +256,9 @@ class _GroupedListViewState<T, E> extends State<GroupedListView<T, E>> {
     var index = int.parse(topItemKey);
     if (index != _topElementIndex) {
       E curr = widget.groupBy(_sortedElements[index]);
-      if (_topElementIndex != curr) {
-        _topElementIndex = curr;
+      E prev = widget.groupBy(_sortedElements[_topElementIndex]);
+      if (prev != curr) {
+        _topElementIndex = index;
         _streamController.add(_topElementIndex);
       }
     }
@@ -276,15 +285,14 @@ class _GroupedListViewState<T, E> extends State<GroupedListView<T, E>> {
     return elements;
   }
 
-  Widget _showFixedGroupHeader(E topElementIndex) {
+  Widget _showFixedGroupHeader(int topElementIndex) {
     _groupHeaderKey = GlobalKey();
     if (widget.useStickyGroupSeparators && widget.elements.length > 0) {
-      topElementIndex ??= widget.groupBy(_sortedElements[0]);
       return Container(
         key: _groupHeaderKey,
         color: widget.floatingHeader ? null : Color(0xffF7F7F7),
         width: widget.floatingHeader ? null : MediaQuery.of(context).size.width,
-        child: widget.groupSeparatorBuilder(topElementIndex),
+        child: _buildGroupSeparator(_sortedElements[topElementIndex]),
       );
     }
     return Container();
@@ -293,6 +301,13 @@ class _GroupedListViewState<T, E> extends State<GroupedListView<T, E>> {
   bool _isListItemRendered(GlobalKey<State<StatefulWidget>> key) {
     return key.currentContext != null &&
         key.currentContext.findRenderObject() != null;
+  }
+
+  Widget _buildGroupSeparator(T element) {
+    if (widget.groupHeaderBuilder == null) {
+      return widget.groupSeparatorBuilder(widget.groupBy(element));
+    }
+    return widget.groupHeaderBuilder(element);
   }
 }
 
