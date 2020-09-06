@@ -16,7 +16,7 @@ A flutter `ListView` in which list items can be grouped to sections.
  Add the package to your pubspec.yaml:
 
  ```yaml
- grouped_list: ^3.3.0
+ grouped_list: ^3.4.0
  ```
  
  In your dart file, import the library:
@@ -43,7 +43,10 @@ import 'package:grouped_list/grouped_list.dart';
 |`elements`| A list of the data you want to display in the list | required | - |
 |`groupBy` |Function which maps an element to its grouped value | required | - |
 |`itemBuilder` / `indexedItemBuilder`| Function which returns an Widget which defines the item. `indexedItemBuilder` provides the current index as well. If both are defined `indexedItemBuilder` is preferred| yes, either of them | - |
-|`groupSeparatorBuilder`| Function which gets the `groupBy`-value and returns an Widget which defines the group header separator | required | - |
+|`groupSeparatorBuilder` / `groupHeaderBuilder`| Function which returns an Widget which defines the group headers. While `groupSeparatorBuilder` gets the `groupBy`-value as parameter `groupHeaderBuilder` gets the whole element. If both are defined `groupHeaderBuilder` is preferred| yes, either of them | - |
+|`useStickyGroupSeparators` | When set to true the group header of the current visible group will stick on top | no | `false` |
+|`floatingHeader` | Whether the sticky group header float over the list or occupy it's own space | no | `false` |
+|`stickyHeaderBackgroundColor` | Defines the background color of the sticky header. Will only be used if `useStickyGroupSeparators` is used | no | `Color(0xffF7F7F7)` |
 |`separator` | A Widget which defines a separator between items inside a group | no | no separator |
 | `order` | Change to `GroupedListOrder.DESC` to reverse the group sorting | no | `GroupedListOrder.ASC` |
 
