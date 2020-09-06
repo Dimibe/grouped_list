@@ -64,6 +64,10 @@ class GroupedListView<T, E> extends StatefulWidget {
   /// Whether the group headers float over the list or occupy their own space.
   final bool floatingHeader;
 
+  /// Background color of the sticky header.
+  /// Only used if [floatingHeader] is false.
+  final Color stickyHeaderBackgroundColor;
+
   /// An object that can be used to control the position to which this scroll
   /// view is scrolled.
   ///
@@ -128,6 +132,7 @@ class GroupedListView<T, E> extends StatefulWidget {
     this.useStickyGroupSeparators = false,
     this.separator = const SizedBox.shrink(),
     this.floatingHeader = false,
+    this.stickyHeaderBackgroundColor = const Color(0xffF7F7F7),
     this.key,
     this.scrollDirection = Axis.vertical,
     this.controller,
@@ -290,7 +295,8 @@ class _GroupedListViewState<T, E> extends State<GroupedListView<T, E>> {
     if (widget.useStickyGroupSeparators && widget.elements.length > 0) {
       return Container(
         key: _groupHeaderKey,
-        color: widget.floatingHeader ? null : Color(0xffF7F7F7),
+        color:
+            widget.floatingHeader ? null : widget.stickyHeaderBackgroundColor,
         width: widget.floatingHeader ? null : MediaQuery.of(context).size.width,
         child: _buildGroupSeparator(_sortedElements[topElementIndex]),
       );
