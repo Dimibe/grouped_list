@@ -54,5 +54,5 @@ import 'package:grouped_list/grouped_list.dart';
 
 
 ### Other packages : 
-Check out my other package [StickyGroupedList](https://pub.dev/packages/sticky_grouped_list), which is based on the [scrollable_positioned_list](https://pub.dev/packages/scrollable_positioned_list) and comes with sticky headers!
+Check out my other package [StickyGroupedList](https://pub.dev/packages/sticky_grouped_list), which is based on the [scrollable_positioned_list](https://pub.dev/packages/scrollable_positioned_list). **Easy creation of chat-like dialogs**, where scrolling starts at bottom and goes upwards. 
 
