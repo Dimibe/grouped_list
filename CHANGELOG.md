@@ -1,3 +1,7 @@
+## [3.5.0] - 19.09.2020
+
+* New feature custom sorting. Added two new options `groupComparator` and `itemComparator`which can be used for comparison between two groups and items. If used the functions will be used for sorting the list.
+
 ## [3.4.0] - 06.09.2020
 
 * New option `groupHeaderBuilder`: Same as `groupSeparatorBuilder` but will get the whole element instead of just the groupBy value.
