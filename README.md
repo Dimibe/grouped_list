@@ -33,6 +33,9 @@ import 'package:grouped_list/grouped_list.dart';
     groupBy: (element) => element['group'],
     groupSeparatorBuilder: (String groupByValue) => Text(groupByValue),
     itemBuilder: (context, dynamic element) => Text(element['name']),
+    itemComparator: (item1, item2) => item1['name'].compareTo(item2['name']),
+    useStickyGroupSeparators: true,
+    floatingHeader: true,
     order: GroupedListOrder.ASC,
   ),
 ```
@@ -48,6 +51,8 @@ import 'package:grouped_list/grouped_list.dart';
 |`floatingHeader` | Whether the sticky group header float over the list or occupy it's own space | no | `false` |
 |`stickyHeaderBackgroundColor` | Defines the background color of the sticky header. Will only be used if `useStickyGroupSeparators` is used | no | `Color(0xffF7F7F7)` |
 |`separator` | A Widget which defines a separator between items inside a group | no | no separator |
+| `groupComparator` | Can be used to define a custom sorting for the groups. Otherwise the natural sorting order is used | no | - |
+| `itemComparator` | Can be used to define a custom sorting for the elements inside each group. Otherwise the natural sorting order is used | no | - |
 | `order` | Change to `GroupedListOrder.DESC` to reverse the group sorting | no | `GroupedListOrder.ASC` |
 
 **Also the fields from `ListView.builder` can be used.** 

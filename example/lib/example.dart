@@ -26,8 +26,11 @@ class MyApp extends StatelessWidget {
           title: Text('Grouped List View Example'),
         ),
         body: GroupedListView<dynamic, String>(
-          groupBy: (element) => element['group'],
           elements: _elements,
+          groupBy: (element) => element['group'],
+          groupComparator: (value1, value2) => value2.compareTo(value1),
+          itemComparator: (item1, item2) =>
+              item1['name'].compareTo(item2['name']),
           order: GroupedListOrder.DESC,
           useStickyGroupSeparators: true,
           groupSeparatorBuilder: (String value) => Padding(
