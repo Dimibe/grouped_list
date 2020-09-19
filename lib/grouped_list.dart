@@ -17,9 +17,21 @@ class GroupedListView<T, E> extends StatefulWidget {
 
   /// Defines which elements are grouped together.
   ///
-  /// Function is called for each element, when equal for two elements, those
-  /// two belong the same group.
+  /// Function is called for each element in the list, when equal for two
+  /// elements, those two belong to the same group.
   final E Function(T element) groupBy;
+
+  /// Can be used to define a custom sorting for the groups.
+  ///
+  /// If not set groups will be sorted with their natural sorting order or their
+  /// specific [Comparable] implementation.
+  final int Function(E value1, E value2) groupComparator;
+
+  /// Can be used to define a custom sorting for the elements inside each group.
+  ///
+  /// If not set elements will be sorted with their natural sorting order or
+  /// their specific [Comparable] implementation.
+  final int Function(T element1, T element2) itemComparator;
 
   /// Called to build group separators for each group.
   /// Value is always the groupBy result from the first element of the group.
@@ -43,12 +55,12 @@ class GroupedListView<T, E> extends StatefulWidget {
   final Widget Function(BuildContext context, T element, int index)
       indexedItemBuilder;
 
-  /// Whether the view scrolls in the reading direction.
+  /// Whether the order of the list is ascending or descending.
   ///
   /// Defaults to ASC.
   final GroupedListOrder order;
 
-  /// Whether the elements will be sorted or not. IF not it must be done
+  /// Whether the elements will be sorted or not. If not it must be done
   ///  manually.
   ///
   /// Defauts to true.
@@ -123,10 +135,12 @@ class GroupedListView<T, E> extends StatefulWidget {
   GroupedListView({
     @required this.elements,
     @required this.groupBy,
+    this.groupComparator,
     this.groupSeparatorBuilder,
     this.groupHeaderBuilder,
     this.itemBuilder,
     this.indexedItemBuilder,
+    this.itemComparator,
     this.order = GroupedListOrder.ASC,
     this.sort = true,
     this.useStickyGroupSeparators = false,
@@ -274,12 +288,21 @@ class _GroupedListViewState<T, E> extends State<GroupedListView<T, E>> {
     if (widget.sort && elements.isNotEmpty) {
       elements.sort((e1, e2) {
         var compareResult;
-        if (widget.groupBy(e1) is Comparable) {
+        // compare groups
+        if (widget.groupComparator != null) {
+          compareResult =
+              widget.groupComparator(widget.groupBy(e1), widget.groupBy(e2));
+        } else if (widget.groupBy(e1) is Comparable) {
           compareResult = (widget.groupBy(e1) as Comparable)
               .compareTo(widget.groupBy(e2) as Comparable);
         }
-        if ((compareResult == null || compareResult == 0) && e1 is Comparable) {
-          compareResult = (e1).compareTo(e2);
+        // compare elements inside group
+        if ((compareResult == null || compareResult == 0)) {
+          if (widget.itemComparator != null) {
+            compareResult = widget.itemComparator(e1, e2);
+          } else if (e1 is Comparable) {
+            compareResult = e1.compareTo(e2);
+          }
         }
         return compareResult;
       });
