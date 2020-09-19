@@ -58,6 +58,9 @@ import 'package:grouped_list/grouped_list.dart';
 **Also the fields from `ListView.builder` can be used.** 
 
 
-### Other packages : 
-Check out my other package [StickyGroupedList](https://pub.dev/packages/sticky_grouped_list), which is based on the [scrollable_positioned_list](https://pub.dev/packages/scrollable_positioned_list). **Easy creation of chat-like dialogs**, where scrolling starts at bottom and goes upwards. 
+### My other packages : 
+
+**For easy creation of chat-like dialogs:**
+
+Check out my other package [StickyGroupedList](https://pub.dev/packages/sticky_grouped_list), which is based on the scrollable_positioned_list and has a `reverse` option with which the scrollview starts at the end of the list.
 
