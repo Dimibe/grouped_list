@@ -33,10 +33,10 @@ import 'package:grouped_list/grouped_list.dart';
     groupBy: (element) => element['group'],
     groupSeparatorBuilder: (String groupByValue) => Text(groupByValue),
     itemBuilder: (context, dynamic element) => Text(element['name']),
-    itemComparator: (item1, item2) => item1['name'].compareTo(item2['name']),
-    useStickyGroupSeparators: true,
-    floatingHeader: true,
-    order: GroupedListOrder.ASC,
+    itemComparator: (item1, item2) => item1['name'].compareTo(item2['name']), // optional
+    useStickyGroupSeparators: true, // optional
+    floatingHeader: true, // optional
+    order: GroupedListOrder.ASC, // optional
   ),
 ```
 
