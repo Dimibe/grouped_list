@@ -3,6 +3,7 @@ library grouped_list;
 import 'dart:async';
 import 'dart:collection';
 
+import 'package:flutter/gestures.dart';
 import 'package:flutter/widgets.dart';
 
 /// A groupable list of widgets similar to [ListView], execpt that the
@@ -138,6 +139,45 @@ class GroupedListView<T, E> extends StatefulWidget {
   /// See [ScrollView.cacheExtent]
   final double cacheExtent;
 
+  /// {@macro flutter.widgets.Clip}
+  ///
+  /// Defaults to [Clip.hardEdge].
+  final Clip clipBehavior;
+
+  /// {@macro flutter.widgets.scrollable.dragStartBehavior}
+  final DragStartBehavior dragStartBehavior;
+
+  /// [ScrollViewKeyboardDismissBehavior] the defines how this [ScrollView] will
+  /// dismiss the keyboard automatically.
+  final ScrollViewKeyboardDismissBehavior keyboardDismissBehavior;
+
+  /// {@macro flutter.widgets.scrollable.restorationId}
+  final String restorationId;
+
+  /// The number of children that will contribute semantic information.
+  ///
+  /// Some subtypes of [ScrollView] can infer this value automatically. For
+  /// example [ListView] will use the number of widgets in the child list,
+  /// while the [ListView.separated] constructor will use half that amount.
+  ///
+  /// For [CustomScrollView] and other types which do not receive a builder
+  /// or list of widgets, the child count must be explicitly provided. If the
+  /// number is unknown or unbounded this should be left unset or set to null.
+  ///
+  /// See also:
+  ///
+  ///  * [SemanticsConfiguration.scrollChildCount], the corresponding semantics property.
+  final int semanticChildCount;
+
+  /// If non-null, forces the children to have the given extent in the scroll
+  /// direction.
+  ///
+  /// Specifying an [itemExtent] is more efficient than letting the children
+  /// determine their own extent because the scrolling machinery can make use of
+  /// the foreknowledge of the children's extent to save work, for example when
+  /// the scroll position changes drastically.
+  final double itemExtent;
+
   /// Creates a [GroupedListView]
   GroupedListView({
     @required this.elements,
@@ -166,7 +206,15 @@ class GroupedListView<T, E> extends StatefulWidget {
     this.addRepaintBoundaries = true,
     this.addSemanticIndexes = true,
     this.cacheExtent,
-  }) : super(key: key);
+    this.clipBehavior = Clip.hardEdge,
+    this.keyboardDismissBehavior = ScrollViewKeyboardDismissBehavior.manual,
+    this.dragStartBehavior = DragStartBehavior.start,
+    this.restorationId,
+    this.semanticChildCount,
+    this.itemExtent,
+  })  : assert(itemBuilder != null || indexedItemBuilder != null),
+        assert(groupSeparatorBuilder != null || groupHeaderBuilder != null),
+        super(key: key);
 
   @override
   State<StatefulWidget> createState() => _GroupedListViewState<T, E>();
@@ -228,6 +276,12 @@ class _GroupedListViewState<T, E> extends State<GroupedListView<T, E>> {
           shrinkWrap: widget.shrinkWrap,
           padding: widget.padding,
           reverse: widget.reverse,
+          clipBehavior: widget.clipBehavior,
+          dragStartBehavior: widget.dragStartBehavior,
+          itemExtent: widget.itemExtent,
+          restorationId: widget.restorationId,
+          keyboardDismissBehavior: widget.keyboardDismissBehavior,
+          semanticChildCount: widget.semanticChildCount,
           itemCount: _sortedElements.length * 2,
           addAutomaticKeepAlives: widget.addAutomaticKeepAlives,
           addRepaintBoundaries: widget.addRepaintBoundaries,
