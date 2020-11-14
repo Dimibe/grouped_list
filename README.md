@@ -4,9 +4,7 @@
  
 A flutter `ListView` in which list items can be grouped to sections.
 
-<img src="https://raw.githubusercontent.com/Dimibe/grouped_list/master/assets/chat_example.png" width="250">
-
-<img src="https://raw.githubusercontent.com/Dimibe/grouped_list/master/assets/example.png" width="250">
+<img src="https://raw.githubusercontent.com/Dimibe/grouped_list/master/assets/chat_example.png" width="300"><img src="https://raw.githubusercontent.com/Dimibe/grouped_list/master/assets/example.png" width="300">
 
 #### Features
 * Easy creation of chat dialog.
