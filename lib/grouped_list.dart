@@ -111,6 +111,13 @@ class GroupedListView<T, E> extends StatefulWidget {
   /// The amount of space by which to inset the children.
   final EdgeInsetsGeometry padding;
 
+  /// Whether the view scrolls in the reading direction.
+  ///
+  /// Defaults to false.
+  ///
+  /// See [ScrollView.reverse].
+  final bool reverse;
+
   /// Whether to wrap each child in an [AutomaticKeepAlive].
   ///
   /// See [SliverChildBuilderDelegate.addAutomaticKeepAlives].
@@ -154,6 +161,7 @@ class GroupedListView<T, E> extends StatefulWidget {
     this.physics,
     this.shrinkWrap = false,
     this.padding,
+    this.reverse = false,
     this.addAutomaticKeepAlives = true,
     this.addRepaintBoundaries = true,
     this.addSemanticIndexes = true,
@@ -176,6 +184,15 @@ class _GroupedListViewState<T, E> extends State<GroupedListView<T, E>> {
   RenderBox _listBox;
 
   @override
+  void initState() {
+    _controller = widget.controller ?? ScrollController();
+    if (widget.useStickyGroupSeparators) {
+      _controller.addListener(_scrollListener);
+    }
+    super.initState();
+  }
+
+  @override
   void dispose() {
     _controller.removeListener(_scrollListener);
     if (widget.controller == null) {
@@ -188,6 +205,16 @@ class _GroupedListViewState<T, E> extends State<GroupedListView<T, E>> {
   @override
   Widget build(BuildContext context) {
     this._sortedElements = _sortElements();
+    var hiddenIndex = widget.reverse ? _sortedElements.length * 2 - 1 : 0;
+    var _isSeparator =
+        widget.reverse ? (int i) => i.isOdd : (int i) => i.isEven;
+
+    if (widget.reverse) {
+      WidgetsBinding.instance.addPostFrameCallback((_) {
+        _scrollListener();
+      });
+    }
+
     return Stack(
       key: _key,
       alignment: Alignment.topCenter,
@@ -195,11 +222,12 @@ class _GroupedListViewState<T, E> extends State<GroupedListView<T, E>> {
         ListView.builder(
           key: widget.key,
           scrollDirection: widget.scrollDirection,
-          controller: _getController(),
+          controller: _controller,
           primary: widget.primary,
           physics: widget.physics,
           shrinkWrap: widget.shrinkWrap,
           padding: widget.padding,
+          reverse: widget.reverse,
           itemCount: _sortedElements.length * 2,
           addAutomaticKeepAlives: widget.addAutomaticKeepAlives,
           addRepaintBoundaries: widget.addRepaintBoundaries,
@@ -207,15 +235,16 @@ class _GroupedListViewState<T, E> extends State<GroupedListView<T, E>> {
           cacheExtent: widget.cacheExtent,
           itemBuilder: (context, index) {
             int actualIndex = index ~/ 2;
-            if (index == 0) {
+            if (index == hiddenIndex) {
               return Opacity(
                 opacity: widget.useStickyGroupSeparators ? 0 : 1,
                 child: _buildGroupSeparator(_sortedElements[actualIndex]),
               );
             }
-            if (index.isEven) {
+            if (_isSeparator(index)) {
               E curr = widget.groupBy(_sortedElements[actualIndex]);
-              E prev = widget.groupBy(_sortedElements[actualIndex - 1]);
+              E prev = widget.groupBy(
+                  _sortedElements[actualIndex + (widget.reverse ? 1 : -1)]);
               if (prev != curr) {
                 return _buildGroupSeparator(_sortedElements[actualIndex]);
               }
@@ -244,29 +273,20 @@ class _GroupedListViewState<T, E> extends State<GroupedListView<T, E>> {
                 context, _sortedElements[actualIndex], actualIndex));
   }
 
-  ScrollController _getController() {
-    _controller =
-        widget.controller == null ? ScrollController() : widget.controller;
-    if (widget.useStickyGroupSeparators) {
-      _controller.addListener(_scrollListener);
-    }
-    return _controller;
-  }
-
   _scrollListener() {
     _listBox ??= _key?.currentContext?.findRenderObject();
     double listPos = _listBox?.localToGlobal(Offset.zero)?.dy ?? 0;
     _headerBox ??= _groupHeaderKey?.currentContext?.findRenderObject();
     double headerHeight = _headerBox?.size?.height ?? 0;
     double max = double.negativeInfinity;
-    String topItemKey = '0';
+    String topItemKey = widget.reverse ? '${_sortedElements.length - 1}' : '0';
     for (var entry in _keys.entries) {
       var key = entry.value;
       if (_isListItemRendered(key)) {
         RenderBox itemBox = key.currentContext.findRenderObject();
-        double y =
-            itemBox.localToGlobal(Offset(0, -listPos - 2 * headerHeight)).dy;
-        if (y <= 0 && y > max) {
+        // position of the item's top border inside the list view
+        double y = itemBox.localToGlobal(Offset(0, -listPos - headerHeight)).dy;
+        if (y <= headerHeight && y > max) {
           topItemKey = entry.key;
           max = y;
         }
