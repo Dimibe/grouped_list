@@ -17,13 +17,13 @@ List _elements = <Element>[
   Element(DateTime(2020, 6, 27, 18, 41),
       'Hey whats up? Can you help me real quick?'),
   Element(DateTime(2020, 6, 27, 18, 45), 'Of course  what do you need?', true),
-  Element(DateTime(2020, 6, 27, 18, 47),
+  Element(DateTime(2020, 6, 28, 8, 47),
       'Can you send me the homework for tomorrow please?'),
   Element(
-    DateTime(2020, 6, 27, 18, 48),
+    DateTime(2020, 6, 28, 8, 48),
     'I dont understand the math questions :(',
   ),
-  Element(DateTime(2020, 6, 27, 18, 56), 'Yeah sure I have send them per mail',
+  Element(DateTime(2020, 6, 28, 8, 56), 'Yeah sure I have send them per mail',
       true),
 ];
 
@@ -38,7 +38,7 @@ class MyApp extends StatelessWidget {
       ),
       home: Scaffold(
         appBar: AppBar(
-          title: Text('Grouped List Chat Example'),
+          title: Text('Grouped List View Example'),
         ),
         body: Builder(
           builder: (context) => Column(
@@ -47,13 +47,12 @@ class MyApp extends StatelessWidget {
                 height: MediaQuery.of(context).size.height * 0.8,
                 child: GroupedListView<Element, DateTime>(
                   elements: _elements,
+                  order: GroupedListOrder.DESC,
                   reverse: true,
                   floatingHeader: true,
                   useStickyGroupSeparators: true,
                   groupBy: (Element element) => DateTime(
                       element.date.year, element.date.month, element.date.day),
-                  groupComparator: (v1, v2) => v2.compareTo(v1),
-                  itemComparator: (e1, e2) => e1.name.compareTo(e2.name),
                   groupHeaderBuilder: (Element element) => Container(
                     height: 40,
                     child: Align(

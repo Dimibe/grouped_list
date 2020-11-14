@@ -61,7 +61,7 @@ import 'package:grouped_list/grouped_list.dart';
 #### Highlight - Chat Dialog
 
 Easy creation of chat dialogs.
-Just set the option `reverse` to `true`. A full example can be found in the examples.
+Just set the option `reverse` to `true` and `order` to `GroupedListOrder.DESC`. A full example can be found in the examples.
 The list will be scrolled to the end in the initial state and therefore scrolling will be against redeaing direction. 
 
 
