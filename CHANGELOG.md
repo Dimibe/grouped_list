@@ -1,3 +1,7 @@
+## [3.6.0] - 14.11.2020
+
+* New feature: Add `reverse` option from list_view.
+
 ## [3.5.0] - 19.09.2020
 
 * New feature custom sorting. Added two new options `groupComparator` and `itemComparator`which can be used for comparison between two groups and items. If used the functions will be used for sorting the list.
