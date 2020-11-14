@@ -4,9 +4,12 @@
  
 A flutter `ListView` in which list items can be grouped to sections.
 
+<img src="https://raw.githubusercontent.com/Dimibe/grouped_list/master/assets/chat_example.png" width="300">
+
 <img src="https://raw.githubusercontent.com/Dimibe/grouped_list/master/assets/screenshot-for-readme.png" width="300">
 
 #### Features
+* Easy creation of chat dialog.
 * List Items can be separated in groups.
 * For the groups an individual header can be set.
 * Almost all fields from `ListView.builder` available.
@@ -57,10 +60,17 @@ import 'package:grouped_list/grouped_list.dart';
 
 **Also the fields from `ListView.builder` can be used.** 
 
+#### Highlight - Chat Dialog
+
+Easy creation of chat dialogs.
+Just set the option `reverse` to `true`. A full example can be found in the examples.
+The list will be scrolled to the end in the initial state and therefore scrolling will be against redeaing direction. 
+
+
 
 ### My other packages : 
 
 **For easy creation of chat-like dialogs:**
 
-Check out my other package [StickyGroupedList](https://pub.dev/packages/sticky_grouped_list), which is based on the scrollable_positioned_list and has a `reverse` option with which the scrollview starts at the end of the list.
+Check out my other package [StickyGroupedList](https://pub.dev/packages/sticky_grouped_list), which is based on the scrollable_positioned_list.
 
