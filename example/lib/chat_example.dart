@@ -38,7 +38,7 @@ class MyApp extends StatelessWidget {
       ),
       home: Scaffold(
         appBar: AppBar(
-          title: Text('Chat with Peter'),
+          title: Text('Grouped List Chat Example'),
         ),
         body: Builder(
           builder: (context) => Column(
