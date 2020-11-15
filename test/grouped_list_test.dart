@@ -13,75 +13,73 @@ final List _elements = [
 ];
 
 void main() {
-  Widget _buildGroupSeperator(dynamic element) {
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.center,
-      children: <Widget>[
-        Text('$element'),
-      ],
+  Widget _buildApp(List elements, {bool reverse = false}) {
+    return MaterialApp(
+      home: Scaffold(
+        body: Container(
+          height: 550,
+          child: GroupedListView(
+            groupBy: (element) => element['group'],
+            elements: _elements,
+            useStickyGroupSeparators: false,
+            reverse: reverse,
+            order: GroupedListOrder.ASC,
+            groupSeparatorBuilder: (element) =>
+                Container(height: 50, child: Text('$element')),
+            itemBuilder: (_, element) => Container(
+              height: 100,
+              child: Text(element['name']),
+            ),
+          ),
+        ),
+      ),
     );
   }
 
   testWidgets('finds elemets and group separators',
       (WidgetTester tester) async {
-    // Build an app with a Text widget that displays the letter 'H'.
-    await tester.pumpWidget(
-      MaterialApp(
-        home: Scaffold(
-          body: GroupedListView(
-            groupBy: (element) => element['group'],
-            elements: _elements,
-            sort: true,
-            useStickyGroupSeparators: true,
-            order: GroupedListOrder.DESC,
-            groupSeparatorBuilder: _buildGroupSeperator,
-            itemBuilder: (context, element) => Text(element['name']),
-          ),
-        ),
-      ),
-    );
+    await tester.pumpWidget(_buildApp(_elements));
 
-    // Find a widget that displays the letter 'H'.
     expect(find.text('John'), findsOneWidget);
-    expect(find.text('Danny'), findsOneWidget);
     expect(find.text('Team A'), findsOneWidget);
     expect(find.text('Team B'), findsOneWidget);
     expect(find.text('Team C'), findsWidgets);
+    expect(find.text('Danny'), findsNothing);
+
+    await tester.drag(find.byType(GroupedListView), const Offset(0.0, -250.0));
+    await tester.pump();
+
+    expect(find.text('John'), findsNothing);
+    expect(find.text('Danny'), findsOneWidget);
+  });
+  testWidgets('finds elemets and group separators with reverse list',
+      (WidgetTester tester) async {
+    await tester.pumpWidget(_buildApp(_elements, reverse: true));
+
+    expect(find.text('John'), findsOneWidget);
+    expect(find.text('Team A'), findsOneWidget);
+    expect(find.text('Team B'), findsOneWidget);
+    expect(find.text('Team C'), findsNothing);
+    expect(find.text('Danny'), findsNothing);
+
+    await tester.drag(find.byType(GroupedListView), const Offset(0.0, 250.0));
+    await tester.pump();
+
+    expect(find.text('John'), findsNothing);
+    expect(find.text('Team C'), findsOneWidget);
+    expect(find.text('Danny'), findsOneWidget);
   });
 
   testWidgets('empty list', (WidgetTester tester) async {
-    // Build an app with a Text widget that displays the letter 'H'.
-    await tester.pumpWidget(
-      MaterialApp(
-        home: Scaffold(
-          body: GroupedListView(
-            groupBy: (element) => element['group'],
-            elements: [],
-            useStickyGroupSeparators: true,
-            groupSeparatorBuilder: _buildGroupSeperator,
-            itemBuilder: (context, element) => Text(element['name']),
-          ),
-        ),
-      ),
-    );
+    await tester.pumpWidget(_buildApp([]));
+  });
+  testWidgets('empty reversed list', (WidgetTester tester) async {
+    await tester.pumpWidget(_buildApp([], reverse: true));
   });
 
   testWidgets('finds only one group separator per group',
       (WidgetTester tester) async {
-    // Build an app with a Text widget that displays the letter 'H'.
-    await tester.pumpWidget(
-      MaterialApp(
-        home: Scaffold(
-          body: GroupedListView(
-            groupBy: (element) => element['group'],
-            elements: _elements,
-            useStickyGroupSeparators: true,
-            groupSeparatorBuilder: _buildGroupSeperator,
-            itemBuilder: (context, element) => Text(element['name']),
-          ),
-        ),
-      ),
-    );
+    await tester.pumpWidget(_buildApp(_elements));
     expect(find.text("Team B"), findsOneWidget);
   });
 }

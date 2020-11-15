@@ -2,6 +2,7 @@ library grouped_list;
 
 import 'dart:async';
 import 'dart:collection';
+import 'dart:math' as math;
 
 import 'package:flutter/gestures.dart';
 import 'package:flutter/widgets.dart';
@@ -346,7 +347,7 @@ class _GroupedListViewState<T, E> extends State<GroupedListView<T, E>> {
         }
       }
     }
-    var index = int.parse(topItemKey);
+    var index = math.max(int.parse(topItemKey), 0);
     if (index != _topElementIndex) {
       E curr = widget.groupBy(_sortedElements[index]);
       E prev = widget.groupBy(_sortedElements[_topElementIndex]);
