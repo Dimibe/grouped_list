@@ -223,7 +223,7 @@ class GroupedListView<T, E> extends StatefulWidget {
 
 class _GroupedListViewState<T, E> extends State<GroupedListView<T, E>> {
   StreamController<int> _streamController = StreamController<int>();
-  ScrollController? _controller;
+  late ScrollController _controller;
   Map<String, GlobalKey> _keys = LinkedHashMap<String, GlobalKey>();
   GlobalKey? _groupHeaderKey;
   List<T> _sortedElements = [];
@@ -236,16 +236,16 @@ class _GroupedListViewState<T, E> extends State<GroupedListView<T, E>> {
   void initState() {
     _controller = widget.controller ?? ScrollController();
     if (widget.useStickyGroupSeparators) {
-      _controller!.addListener(_scrollListener);
+      _controller.addListener(_scrollListener);
     }
     super.initState();
   }
 
   @override
   void dispose() {
-    _controller!.removeListener(_scrollListener);
+    _controller.removeListener(_scrollListener);
     if (widget.controller == null) {
-      _controller!.dispose();
+      _controller.dispose();
     }
     _streamController.close();
     super.dispose();
@@ -329,11 +329,11 @@ class _GroupedListViewState<T, E> extends State<GroupedListView<T, E>> {
   }
 
   _scrollListener() {
-    _listBox ??= _key?.currentContext?.findRenderObject() as RenderBox?;
-    double listPos = _listBox?.localToGlobal(Offset.zero)?.dy ?? 0;
+    _listBox ??= _key.currentContext?.findRenderObject() as RenderBox?;
+    double listPos = _listBox?.localToGlobal(Offset.zero).dy ?? 0;
     _headerBox ??=
         _groupHeaderKey?.currentContext?.findRenderObject() as RenderBox?;
-    double headerHeight = _headerBox?.size?.height ?? 0;
+    double headerHeight = _headerBox?.size.height ?? 0;
     double max = double.negativeInfinity;
     String topItemKey = widget.reverse ? '${_sortedElements.length - 1}' : '0';
     for (var entry in _keys.entries) {
