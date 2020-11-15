@@ -1,6 +1,11 @@
+## [3.7.0] - 15.11.2020
+
+* New feature: Add new options from ListView.
+* Bug fixes: reverse option works with empty list
+
 ## [3.6.0] - 14.11.2020
 
-* New feature: Add `reverse` option from list_view.
+* New feature: Add `reverse` option from ListView.
 
 ## [3.5.0] - 19.09.2020
 
