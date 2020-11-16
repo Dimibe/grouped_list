@@ -309,10 +309,14 @@ class _GroupedListViewState<T, E> extends State<GroupedListView<T, E>> {
           },
         ),
         StreamBuilder<int>(
-          stream: _streamController.stream,
-          initialData: _topElementIndex,
-          builder: (context, snapshot) => _showFixedGroupHeader(snapshot.data),
-        ),
+            stream: _streamController.stream,
+            initialData: _topElementIndex,
+            builder: (context, snapshot) {
+              if (snapshot.hasData) {
+                return _showFixedGroupHeader(snapshot.data!);
+              }
+              return Container();
+            }),
       ],
     );
   }
@@ -389,7 +393,7 @@ class _GroupedListViewState<T, E> extends State<GroupedListView<T, E>> {
     return elements;
   }
 
-  Widget _showFixedGroupHeader(int? topElementIndex) {
+  Widget _showFixedGroupHeader(int topElementIndex) {
     _groupHeaderKey = GlobalKey();
     if (widget.useStickyGroupSeparators && widget.elements.length > 0) {
       return Container(
@@ -397,7 +401,7 @@ class _GroupedListViewState<T, E> extends State<GroupedListView<T, E>> {
         color:
             widget.floatingHeader ? null : widget.stickyHeaderBackgroundColor,
         width: widget.floatingHeader ? null : MediaQuery.of(context).size.width,
-        child: _buildGroupSeparator(_sortedElements[topElementIndex!]),
+        child: _buildGroupSeparator(_sortedElements[topElementIndex]),
       );
     }
     return Container();
