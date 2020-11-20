@@ -2,7 +2,7 @@
 [![Pub](https://img.shields.io/pub/v/grouped_list.svg)](https://pub.dev/packages/grouped_list)
 ![CI](https://github.com/Dimibe/grouped_list/workflows/CI/badge.svg?branch=master)
 
-##### Now with beta support for null safety! 
+#### Now with beta support for null safety! 
  
 A flutter `ListView` in which list items can be grouped to sections.
 
@@ -19,14 +19,8 @@ A flutter `ListView` in which list items can be grouped to sections.
 
 Add the package to your pubspec.yaml:
 
-Lates stable: 
- ```yaml
- grouped_list: ^3.7.0
- ```
-
- *or:* Prerelease with null safety support: 
-  ```yaml
- grouped_list: ^4.0.0-nullsafety.0
+```yaml
+ grouped_list: ^4.0.0-nullsafety.1
  ```
  
  In your dart file, import the library:

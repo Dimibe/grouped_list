@@ -1,3 +1,9 @@
+## [4.0.0-nullsafety.1] - 20.11.2020
+
+* Update example to support null safety
+* Add pedantic for code analysis
+* Bugfixes: Fix bug where removeListener is called on null [Issue #64](https://github.com/Dimibe/grouped_list/issues/64) 
+
 ## [4.0.0-nullsafety.0] - 20.11.2020
 
 * New feature: Add support for null safety.
