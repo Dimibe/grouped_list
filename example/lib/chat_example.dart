@@ -4,7 +4,7 @@ import 'package:intl/intl.dart';
 
 void main() => runApp(MyApp());
 
-List _elements = <Element>[
+List<Element> _elements = [
   Element(DateTime(2020, 6, 24, 9, 25), 'Hello how are you?'),
   Element(DateTime(2020, 6, 24, 9, 36), 'Fine and what about you?', true),
   Element(DateTime(2020, 6, 24, 9, 39), 'I am fine too'),

@@ -44,7 +44,7 @@ class MyApp extends StatelessWidget {
           itemBuilder: (c, element) {
             return Card(
               elevation: 8.0,
-              margin: new EdgeInsets.symmetric(horizontal: 10.0, vertical: 6.0),
+              margin: EdgeInsets.symmetric(horizontal: 10.0, vertical: 6.0),
               child: Container(
                 child: ListTile(
                   contentPadding:
