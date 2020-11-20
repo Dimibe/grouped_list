@@ -241,7 +241,9 @@ class _GroupedListViewState<T, E> extends State<GroupedListView<T, E>> {
 
   @override
   void dispose() {
-    _controller.removeListener(_scrollListener);
+    if (widget.useStickyGroupSeparators) {
+      _controller.removeListener(_scrollListener);
+    }
     if (widget.controller == null) {
       _controller.dispose();
     }
