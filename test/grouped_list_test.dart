@@ -80,6 +80,6 @@ void main() {
   testWidgets('finds only one group separator per group',
       (WidgetTester tester) async {
     await tester.pumpWidget(_buildApp(_elements));
-    expect(find.text("Team B"), findsOneWidget);
+    expect(find.text('Team B'), findsOneWidget);
   });
 }
