@@ -223,7 +223,7 @@ class GroupedListView<T, E> extends StatefulWidget {
 
 class _GroupedListViewState<T, E> extends State<GroupedListView<T, E>> {
   StreamController<int> _streamController = StreamController<int>();
-  late ScrollController _controller;
+  late final ScrollController _controller;
   Map<String, GlobalKey> _keys = LinkedHashMap<String, GlobalKey>();
   GlobalKey? _groupHeaderKey;
   List<T> _sortedElements = [];
