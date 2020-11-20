@@ -12,8 +12,6 @@ import 'package:flutter/widgets.dart';
 ///
 /// See [ListView.builder]
 class GroupedListView<T, E> extends StatefulWidget {
-  final Key? key;
-
   /// Items of which [itemBuilder] or [indexedItemBuilder] produce the list.
   final List<T> elements;
 
@@ -181,6 +179,7 @@ class GroupedListView<T, E> extends StatefulWidget {
 
   /// Creates a [GroupedListView]
   GroupedListView({
+    Key? key,
     required this.elements,
     required this.groupBy,
     this.groupComparator,
@@ -195,7 +194,6 @@ class GroupedListView<T, E> extends StatefulWidget {
     this.separator = const SizedBox.shrink(),
     this.floatingHeader = false,
     this.stickyHeaderBackgroundColor = const Color(0xffF7F7F7),
-    this.key,
     this.scrollDirection = Axis.vertical,
     this.controller,
     this.primary,
@@ -222,12 +220,12 @@ class GroupedListView<T, E> extends StatefulWidget {
 }
 
 class _GroupedListViewState<T, E> extends State<GroupedListView<T, E>> {
-  StreamController<int> _streamController = StreamController<int>();
+  final StreamController<int> _streamController = StreamController<int>();
+  final LinkedHashMap<String, GlobalKey> _keys = LinkedHashMap();
+  final GlobalKey _key = GlobalKey();
   late final ScrollController _controller;
-  Map<String, GlobalKey> _keys = LinkedHashMap<String, GlobalKey>();
   GlobalKey? _groupHeaderKey;
   List<T> _sortedElements = [];
-  GlobalKey _key = GlobalKey();
   int _topElementIndex = 0;
   RenderBox? _headerBox;
   RenderBox? _listBox;
@@ -253,7 +251,7 @@ class _GroupedListViewState<T, E> extends State<GroupedListView<T, E>> {
 
   @override
   Widget build(BuildContext context) {
-    this._sortedElements = _sortElements();
+    _sortedElements = _sortElements();
     var hiddenIndex = widget.reverse ? _sortedElements.length * 2 - 1 : 0;
     var _isSeparator =
         widget.reverse ? (int i) => i.isOdd : (int i) => i.isEven;
@@ -289,7 +287,7 @@ class _GroupedListViewState<T, E> extends State<GroupedListView<T, E>> {
           addSemanticIndexes: widget.addSemanticIndexes,
           cacheExtent: widget.cacheExtent,
           itemBuilder: (context, index) {
-            int actualIndex = index ~/ 2;
+            var actualIndex = index ~/ 2;
             if (index == hiddenIndex) {
               return Opacity(
                 opacity: widget.useStickyGroupSeparators ? 0 : 1,
@@ -297,8 +295,8 @@ class _GroupedListViewState<T, E> extends State<GroupedListView<T, E>> {
               );
             }
             if (_isSeparator(index)) {
-              E curr = widget.groupBy(_sortedElements[actualIndex]);
-              E prev = widget.groupBy(
+              var curr = widget.groupBy(_sortedElements[actualIndex]);
+              var prev = widget.groupBy(
                   _sortedElements[actualIndex + (widget.reverse ? 1 : -1)]);
               if (prev != curr) {
                 return _buildGroupSeparator(_sortedElements[actualIndex]);
@@ -322,7 +320,7 @@ class _GroupedListViewState<T, E> extends State<GroupedListView<T, E>> {
   }
 
   Container _buildItem(context, int actualIndex) {
-    GlobalKey key = GlobalKey();
+    var key = GlobalKey();
     _keys['$actualIndex'] = key;
     return Container(
         key: key,
@@ -332,20 +330,20 @@ class _GroupedListViewState<T, E> extends State<GroupedListView<T, E>> {
                 context, _sortedElements[actualIndex], actualIndex));
   }
 
-  _scrollListener() {
+  void _scrollListener() {
     _listBox ??= _key.currentContext?.findRenderObject() as RenderBox?;
-    double listPos = _listBox?.localToGlobal(Offset.zero).dy ?? 0;
+    var listPos = _listBox?.localToGlobal(Offset.zero).dy ?? 0;
     _headerBox ??=
         _groupHeaderKey?.currentContext?.findRenderObject() as RenderBox?;
-    double headerHeight = _headerBox?.size.height ?? 0;
-    double max = double.negativeInfinity;
-    String topItemKey = widget.reverse ? '${_sortedElements.length - 1}' : '0';
+    var headerHeight = _headerBox?.size.height ?? 0;
+    var max = double.negativeInfinity;
+    var topItemKey = widget.reverse ? '${_sortedElements.length - 1}' : '0';
     for (var entry in _keys.entries) {
       var key = entry.value;
       if (_isListItemRendered(key)) {
-        RenderBox itemBox = key.currentContext!.findRenderObject() as RenderBox;
+        var itemBox = key.currentContext!.findRenderObject() as RenderBox;
         // position of the item's top border inside the list view
-        double y = itemBox.localToGlobal(Offset(0, -listPos - headerHeight)).dy;
+        var y = itemBox.localToGlobal(Offset(0, -listPos - headerHeight)).dy;
         if (y <= headerHeight && y > max) {
           topItemKey = entry.key;
           max = y;
@@ -354,8 +352,9 @@ class _GroupedListViewState<T, E> extends State<GroupedListView<T, E>> {
     }
     var index = math.max(int.parse(topItemKey), 0);
     if (index != _topElementIndex) {
-      E curr = widget.groupBy(_sortedElements[index]);
-      E prev = widget.groupBy(_sortedElements[_topElementIndex]);
+      var curr = widget.groupBy(_sortedElements[index]);
+      var prev = widget.groupBy(_sortedElements[_topElementIndex]);
+
       if (prev != curr) {
         _topElementIndex = index;
         _streamController.add(_topElementIndex);
@@ -364,7 +363,7 @@ class _GroupedListViewState<T, E> extends State<GroupedListView<T, E>> {
   }
 
   List<T> _sortElements() {
-    List<T> elements = widget.elements;
+    var elements = widget.elements;
     if (widget.sort && elements.isNotEmpty) {
       elements.sort((e1, e2) {
         var compareResult;
@@ -395,7 +394,7 @@ class _GroupedListViewState<T, E> extends State<GroupedListView<T, E>> {
 
   Widget _showFixedGroupHeader(int topElementIndex) {
     _groupHeaderKey = GlobalKey();
-    if (widget.useStickyGroupSeparators && widget.elements.length > 0) {
+    if (widget.useStickyGroupSeparators && widget.elements.isNotEmpty) {
       return Container(
         key: _groupHeaderKey,
         color:
