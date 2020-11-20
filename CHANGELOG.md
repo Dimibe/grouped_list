@@ -1,3 +1,7 @@
+## [4.0.0-nullsafety.0] - 20.11.2020
+
+* New feature: Add support for null safety.
+
 ## [3.7.0] - 15.11.2020
 
 * New feature: Add new options from ListView.

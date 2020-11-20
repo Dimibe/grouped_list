@@ -1,12 +1,15 @@
 # Grouped list package for Flutter.
 [![Pub](https://img.shields.io/pub/v/grouped_list.svg)](https://pub.dev/packages/grouped_list)
 ![CI](https://github.com/Dimibe/grouped_list/workflows/CI/badge.svg?branch=master)
+
+##### Now with beta support for null safety! 
  
 A flutter `ListView` in which list items can be grouped to sections.
 
 <img src="https://raw.githubusercontent.com/Dimibe/grouped_list/master/assets/chat_example.png" width="300"><img src="https://raw.githubusercontent.com/Dimibe/grouped_list/master/assets/example.png" width="300">
 
 #### Features
+* Prerelease version with null safety support!
 * Easy creation of chat dialog.
 * List Items can be separated in groups.
 * For the groups an individual header can be set.
@@ -14,10 +17,16 @@ A flutter `ListView` in which list items can be grouped to sections.
 
 ## Getting Started
 
- Add the package to your pubspec.yaml:
+Add the package to your pubspec.yaml:
 
+Lates stable: 
  ```yaml
  grouped_list: ^3.7.0
+ ```
+
+ *or:* Prerelease with null safety support: 
+  ```yaml
+ grouped_list: ^4.0.0-nullsafety.0
  ```
  
  In your dart file, import the library:
