@@ -1,3 +1,7 @@
+## [3.7.1] - 20.11.2020
+
+* Bug fixes: Fix bug where removeListener was called on null [Issue #64](https://github.com/Dimibe/grouped_list/issues/64)
+
 ## [3.7.0] - 15.11.2020
 
 * New feature: Add new options from ListView.
