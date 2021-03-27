@@ -1,3 +1,7 @@
+## [4.0.0] - 27.03.2020
+
+* Null safety
+
 ## [4.0.0-nullsafety.1] - 20.11.2020
 
 * Update example to support null safety
