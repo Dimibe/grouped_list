@@ -397,12 +397,20 @@ class _GroupedListViewState<T, E> extends State<GroupedListView<T, E>> {
   Widget _showFixedGroupHeader(int topElementIndex) {
     _groupHeaderKey = GlobalKey();
     if (widget.useStickyGroupSeparators && widget.elements.isNotEmpty) {
+      T topElement;
+
+      try {
+        topElement = _sortedElements[topElementIndex];
+      } on RangeError catch (_) {
+        topElement = _sortedElements[0];
+      }
+
       return Container(
         key: _groupHeaderKey,
         color:
             widget.floatingHeader ? null : widget.stickyHeaderBackgroundColor,
         width: widget.floatingHeader ? null : MediaQuery.of(context).size.width,
-        child: _buildGroupSeparator(_sortedElements[topElementIndex]),
+        child: _buildGroupSeparator(topElement),
       );
     }
     return Container();
