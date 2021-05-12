@@ -54,8 +54,7 @@ class GroupedListView<T, E> extends StatefulWidget {
 
   /// Called to build children for the list with
   /// 0 <= element, index < elements.length
-  final Widget Function(BuildContext context, T element, int index)
-      indexedItemBuilder;
+  final Widget Function(BuildContext context, T element, int index) indexedItemBuilder;
 
   /// Whether the order of the list is ascending or descending.
   ///
@@ -257,8 +256,7 @@ class _GroupedListViewState<T, E> extends State<GroupedListView<T, E>> {
   Widget build(BuildContext context) {
     this._sortedElements = _sortElements();
     var hiddenIndex = widget.reverse ? _sortedElements.length * 2 - 1 : 0;
-    var _isSeparator =
-        widget.reverse ? (int i) => i.isOdd : (int i) => i.isEven;
+    var _isSeparator = widget.reverse ? (int i) => i.isOdd : (int i) => i.isEven;
 
     if (widget.reverse) {
       WidgetsBinding.instance.addPostFrameCallback((_) {
@@ -300,8 +298,7 @@ class _GroupedListViewState<T, E> extends State<GroupedListView<T, E>> {
             }
             if (_isSeparator(index)) {
               E curr = widget.groupBy(_sortedElements[actualIndex]);
-              E prev = widget.groupBy(
-                  _sortedElements[actualIndex + (widget.reverse ? 1 : -1)]);
+              E prev = widget.groupBy(_sortedElements[actualIndex + (widget.reverse ? 1 : -1)]);
               if (prev != curr) {
                 return _buildGroupSeparator(_sortedElements[actualIndex]);
               }
@@ -322,12 +319,7 @@ class _GroupedListViewState<T, E> extends State<GroupedListView<T, E>> {
   Container _buildItem(context, int actualIndex) {
     GlobalKey key = GlobalKey();
     _keys['$actualIndex'] = key;
-    return Container(
-        key: key,
-        child: widget.indexedItemBuilder == null
-            ? widget.itemBuilder(context, _sortedElements[actualIndex])
-            : widget.indexedItemBuilder(
-                context, _sortedElements[actualIndex], actualIndex));
+    return Container(key: key, child: widget.indexedItemBuilder == null ? widget.itemBuilder(context, _sortedElements[actualIndex]) : widget.indexedItemBuilder(context, _sortedElements[actualIndex], actualIndex));
   }
 
   _scrollListener() {
@@ -367,11 +359,9 @@ class _GroupedListViewState<T, E> extends State<GroupedListView<T, E>> {
         var compareResult;
         // compare groups
         if (widget.groupComparator != null) {
-          compareResult =
-              widget.groupComparator(widget.groupBy(e1), widget.groupBy(e2));
+          compareResult = widget.groupComparator(widget.groupBy(e1), widget.groupBy(e2));
         } else if (widget.groupBy(e1) is Comparable) {
-          compareResult = (widget.groupBy(e1) as Comparable)
-              .compareTo(widget.groupBy(e2) as Comparable);
+          compareResult = (widget.groupBy(e1) as Comparable).compareTo(widget.groupBy(e2) as Comparable);
         }
         // compare elements inside group
         if ((compareResult == null || compareResult == 0)) {
@@ -393,20 +383,26 @@ class _GroupedListViewState<T, E> extends State<GroupedListView<T, E>> {
   Widget _showFixedGroupHeader(int topElementIndex) {
     _groupHeaderKey = GlobalKey();
     if (widget.useStickyGroupSeparators && widget.elements.length > 0) {
+      T topElement;
+
+      try {
+        topElement = _sortedElements[topElementIndex];
+      } on RangeError catch (_) {
+        topElement = _sortedElements[0];
+      }
+
       return Container(
         key: _groupHeaderKey,
-        color:
-            widget.floatingHeader ? null : widget.stickyHeaderBackgroundColor,
+        color: widget.floatingHeader ? null : widget.stickyHeaderBackgroundColor,
         width: widget.floatingHeader ? null : MediaQuery.of(context).size.width,
-        child: _buildGroupSeparator(_sortedElements[topElementIndex]),
+        child: _buildGroupSeparator(topElement),
       );
     }
     return Container();
   }
 
   bool _isListItemRendered(GlobalKey<State<StatefulWidget>> key) {
-    return key.currentContext != null &&
-        key.currentContext.findRenderObject() != null;
+    return key.currentContext != null && key.currentContext.findRenderObject() != null;
   }
 
   Widget _buildGroupSeparator(T element) {
