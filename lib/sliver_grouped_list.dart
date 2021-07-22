@@ -1,8 +1,9 @@
-library grouped_list;
-
 import 'dart:collection';
 import 'package:flutter/widgets.dart';
-import 'package:grouped_list/grouped_list.dart';
+
+import 'src/GroupedListOrder.dart';
+
+export 'src/GroupedListOrder.dart';
 
 class SliverGroupedListView<T, E> extends StatefulWidget {
   /// Items of which [itemBuilder] or [indexedItemBuilder] produce the list.
