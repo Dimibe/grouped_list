@@ -1,11 +1,13 @@
-library grouped_list;
-
 import 'dart:async';
 import 'dart:collection';
 import 'dart:math' as math;
 
 import 'package:flutter/gestures.dart';
 import 'package:flutter/widgets.dart';
+
+import 'src/GroupedListOrder.dart';
+
+export 'src/GroupedListOrder.dart';
 
 /// A groupable list of widgets similar to [ListView], execpt that the
 /// items can be sectioned into groups.
@@ -420,6 +422,3 @@ class _GroupedListViewState<T, E> extends State<GroupedListView<T, E>> {
     return widget.groupHeaderBuilder!(element);
   }
 }
-
-/// Used to define the order of a [GroupedListView].
-enum GroupedListOrder { ASC, DESC }
