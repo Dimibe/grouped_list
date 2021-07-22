@@ -9,7 +9,7 @@ A flutter `ListView` in which list items can be grouped to sections.
 <img src="https://raw.githubusercontent.com/Dimibe/grouped_list/master/assets/chat_example.png" width="300"><img src="https://raw.githubusercontent.com/Dimibe/grouped_list/master/assets/example.png" width="300">
 
 #### Features
-* Prerelease version with null safety support!
+* Sound null safety support!
 * Easy creation of chat dialog.
 * List Items can be separated in groups.
 * For the groups an individual header can be set.
@@ -20,7 +20,7 @@ A flutter `ListView` in which list items can be grouped to sections.
 Add the package to your pubspec.yaml:
 
 ```yaml
- grouped_list: ^4.0.0
+ grouped_list: ^4.1.0
  ```
  
  In your dart file, import the library:
@@ -61,12 +61,18 @@ import 'package:grouped_list/grouped_list.dart';
 
 **Also the fields from `ListView.builder` can be used.** 
 
+
+#### Highlight - SilverGroupedList
+
+Now supporting a grouped list based on a silver list. Just use `SilverGroupedListView` instead of `GroupedListView`. An example can be found under `example/lib/example_silver`.
+Note that some options of the `GroupedListView` are currently not available in `SilverGroupedListView`.
+
+
 #### Highlight - Chat Dialog
 
 Easy creation of chat dialogs.
 Just set the option `reverse` to `true` and `order` to `GroupedListOrder.DESC`. A full example can be found in the examples.
 The list will be scrolled to the end in the initial state and therefore scrolling will be against redeaing direction. 
-
 
 
 ### My other packages : 
