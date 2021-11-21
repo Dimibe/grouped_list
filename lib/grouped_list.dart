@@ -48,6 +48,13 @@ class GroupedListView<T, E> extends StatefulWidget {
   /// If defined [groupSeparatorBuilder] wont be used.
   final Widget Function(T element)? groupHeaderBuilder;
 
+  /// Same as [groupHeaderBuilder], but you can define a different widget
+  /// for the sticky header.
+  /// The passed element is always the first element of the group.
+  ///
+  /// If defined [groupHeaderBuilder] wont be used.
+  final Widget Function(T element)? groupStickyHeaderBuilder;
+
   /// Called to build children for the list with
   /// 0 <= element < elements.length.
   final Widget Function(BuildContext context, T element)? itemBuilder;
@@ -187,6 +194,7 @@ class GroupedListView<T, E> extends StatefulWidget {
     this.groupComparator,
     this.groupSeparatorBuilder,
     this.groupHeaderBuilder,
+    this.groupStickyHeaderBuilder,
     this.itemBuilder,
     this.indexedItemBuilder,
     this.itemComparator,
@@ -412,7 +420,7 @@ class _GroupedListViewState<T, E> extends State<GroupedListView<T, E>> {
         color:
             widget.floatingHeader ? null : widget.stickyHeaderBackgroundColor,
         width: widget.floatingHeader ? null : MediaQuery.of(context).size.width,
-        child: _buildGroupSeparator(topElement),
+        child: _buildFixedGroupHeader(topElement),
       );
     }
     return Container();
@@ -428,5 +436,12 @@ class _GroupedListViewState<T, E> extends State<GroupedListView<T, E>> {
       return widget.groupSeparatorBuilder!(widget.groupBy(element));
     }
     return widget.groupHeaderBuilder!(element);
+  }
+
+  Widget _buildFixedGroupHeader(T element) {
+    if (widget.groupStickyHeaderBuilder == null) {
+      return _buildGroupSeparator(element);
+    }
+    return widget.groupStickyHeaderBuilder!(element);
   }
 }
