@@ -323,15 +323,15 @@ class _GroupedListViewState<T, E> extends State<GroupedListView<T, E>> {
     );
   }
 
-  Container _buildItem(context, int actualIndex) {
-    var key = GlobalKey();
-    _keys['$actualIndex'] = key;
-    return Container(
-        key: key,
-        child: widget.indexedItemBuilder == null
-            ? widget.itemBuilder!(context, _sortedElements[actualIndex])
-            : widget.indexedItemBuilder!(
-                context, _sortedElements[actualIndex], actualIndex));
+  Widget _buildItem(context, int index) {
+    final key = _keys.putIfAbsent('$index', () => GlobalKey());
+    final value = _sortedElements[index];
+    return KeyedSubtree(
+      key: key,
+      child: widget.indexedItemBuilder != null
+          ? widget.indexedItemBuilder!(context, value, index)
+          : widget.itemBuilder!(context, value),
+    );
   }
 
   void _scrollListener() {
