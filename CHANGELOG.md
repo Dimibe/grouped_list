@@ -1,3 +1,7 @@
+## [4.2.0] - 04.02.2022
+
+* Bugfixes: Fix bug where item is rebuild every time state changes [Pull Request #132](https://github.com/Dimibe/grouped_list/pull/132) 
+
 ## [4.1.0] - 22.07.2021
 
 * New feature: Silver support [Pull Request #112](https://github.com/Dimibe/grouped_list/pull/112) 
