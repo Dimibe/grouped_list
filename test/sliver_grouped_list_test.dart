@@ -16,7 +16,7 @@ void main() {
   Widget _buildApp(List elements) {
     return MaterialApp(
       home: Scaffold(
-        body: Container(
+        body: SizedBox(
           height: 550,
           child: CustomScrollView(
             slivers: [
@@ -25,8 +25,8 @@ void main() {
                 elements: _elements,
                 order: GroupedListOrder.ASC,
                 groupSeparatorBuilder: (dynamic element) =>
-                    Container(height: 50, child: Text('$element')),
-                itemBuilder: (_, dynamic element) => Container(
+                    SizedBox(height: 50, child: Text('$element')),
+                itemBuilder: (_, dynamic element) => SizedBox(
                   height: 100,
                   child: Text(element['name']),
                 ),

@@ -16,7 +16,7 @@ void main() {
   Widget _buildApp(List elements, {bool reverse = false}) {
     return MaterialApp(
       home: Scaffold(
-        body: Container(
+        body: SizedBox(
           height: 550,
           child: GroupedListView(
             groupBy: (dynamic element) => element['group'],
@@ -25,8 +25,8 @@ void main() {
             reverse: reverse,
             order: GroupedListOrder.ASC,
             groupSeparatorBuilder: (dynamic element) =>
-                Container(height: 50, child: Text('$element')),
-            itemBuilder: (_, dynamic element) => Container(
+                SizedBox(height: 50, child: Text('$element')),
+            itemBuilder: (_, dynamic element) => SizedBox(
               height: 100,
               child: Text(element['name']),
             ),
