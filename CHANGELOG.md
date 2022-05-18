@@ -1,3 +1,9 @@
+## [5.0.0] - 18.05.2022
+
+* Feature: Upgrade to flutter 3.0 and use flutter_lints [Pull Request #148](https://github.com/Dimibe/grouped_list/pull/148) 
+* Bugfix: Fixes update to version 3.0 of flutter [Pull Request #147](https://github.com/Dimibe/grouped_list/pull/147) 
+* Bugfix: Resolve out of range error [Pull Request #138](https://github.com/Dimibe/grouped_list/pull/138) 
+
 ## [4.2.0] - 04.02.2022
 
 * Bugfixes: Fix bug where item is rebuild every time state changes [Pull Request #132](https://github.com/Dimibe/grouped_list/pull/132) 
