@@ -1,3 +1,8 @@
+
+## [5.0.1] - 18.05.2022
+
+* Bugfix: Fix lint error 
+
 ## [5.0.0] - 18.05.2022
 
 * Feature: Upgrade to flutter 3.0 and use flutter_lints [Pull Request #148](https://github.com/Dimibe/grouped_list/pull/148) 
