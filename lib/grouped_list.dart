@@ -358,7 +358,7 @@ class _GroupedListViewState<T, E> extends State<GroupedListView<T, E>> {
     var index = math.max(int.parse(topItemKey), 0);
     if (index != _topElementIndex) {
       var curr = widget.groupBy(_sortedElements[index]);
-      var prev;
+      E prev;
 
       try {
         prev = widget.groupBy(_sortedElements[_topElementIndex]);
