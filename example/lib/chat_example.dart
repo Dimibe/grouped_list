@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:grouped_list/grouped_list.dart';
 import 'package:intl/intl.dart';
 
-void main() => runApp(MyApp());
+void main() => runApp(const MyApp());
 
 List<Element> _elements = [
   Element(DateTime(2020, 6, 24, 9, 25), 'Hello how are you?'),
@@ -28,6 +28,8 @@ List<Element> _elements = [
 ];
 
 class MyApp extends StatelessWidget {
+  const MyApp({Key? key}) : super(key: key);
+
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
@@ -38,12 +40,12 @@ class MyApp extends StatelessWidget {
       ),
       home: Scaffold(
         appBar: AppBar(
-          title: Text('Grouped List View Example'),
+          title: const Text('Grouped List View Example'),
         ),
         body: Builder(
           builder: (context) => Column(
             children: [
-              Container(
+              SizedBox(
                 height: MediaQuery.of(context).size.height * 0.8,
                 child: GroupedListView<Element, DateTime>(
                   elements: _elements,
@@ -53,20 +55,19 @@ class MyApp extends StatelessWidget {
                   useStickyGroupSeparators: true,
                   groupBy: (Element element) => DateTime(
                       element.date.year, element.date.month, element.date.day),
-                  groupHeaderBuilder: (Element element) => Container(
+                  groupHeaderBuilder: (Element element) => SizedBox(
                     height: 40,
                     child: Align(
                       child: Container(
                         width: 120,
-                        decoration: BoxDecoration(
+                        decoration: const BoxDecoration(
                           color: Colors.blue,
-                          borderRadius:
-                              const BorderRadius.all(Radius.circular(10.0)),
+                          borderRadius: BorderRadius.all(Radius.circular(10.0)),
                         ),
                         child: Padding(
                           padding: const EdgeInsets.all(8.0),
                           child: Text(
-                            '${DateFormat.yMMMd().format(element.date)}',
+                            DateFormat.yMMMd().format(element.date),
                             textAlign: TextAlign.center,
                           ),
                         ),
@@ -78,7 +79,7 @@ class MyApp extends StatelessWidget {
                       alignment: element.sender
                           ? Alignment.centerRight
                           : Alignment.centerLeft,
-                      child: Container(
+                      child: SizedBox(
                         width: MediaQuery.of(context).size.width * 0.9,
                         child: Card(
                           shape: RoundedRectangleBorder(
