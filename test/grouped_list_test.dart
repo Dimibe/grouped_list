@@ -52,6 +52,7 @@ void main() {
     expect(find.text('John'), findsNothing);
     expect(find.text('Danny'), findsOneWidget);
   });
+
   testWidgets('finds elemets and group separators with reverse list',
       (WidgetTester tester) async {
     await tester.pumpWidget(_buildApp(_elements, reverse: true));
@@ -73,6 +74,7 @@ void main() {
   testWidgets('empty list', (WidgetTester tester) async {
     await tester.pumpWidget(_buildApp([]));
   });
+
   testWidgets('empty reversed list', (WidgetTester tester) async {
     await tester.pumpWidget(_buildApp([], reverse: true));
   });
