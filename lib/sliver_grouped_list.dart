@@ -130,7 +130,7 @@ class _SliverGroupedListViewState<T, E>
   }
 
   List<T> _sortElements() {
-    var elements = widget.elements;
+    var elements = [...widget.elements];
     if (widget.sort && elements.isNotEmpty) {
       elements.sort((e1, e2) {
         int? compareResult;

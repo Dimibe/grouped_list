@@ -374,7 +374,7 @@ class _GroupedListViewState<T, E> extends State<GroupedListView<T, E>> {
   }
 
   List<T> _sortElements() {
-    var elements = widget.elements;
+    var elements = [...widget.elements];
     if (widget.sort && elements.isNotEmpty) {
       elements.sort((e1, e2) {
         int? compareResult;
@@ -405,7 +405,7 @@ class _GroupedListViewState<T, E> extends State<GroupedListView<T, E>> {
 
   Widget _showFixedGroupHeader(int topElementIndex) {
     _groupHeaderKey = GlobalKey();
-    if (widget.useStickyGroupSeparators && widget.elements.isNotEmpty) {
+    if (widget.useStickyGroupSeparators && _sortedElements.isNotEmpty) {
       T topElement;
 
       try {
