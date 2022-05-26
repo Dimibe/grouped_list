@@ -234,6 +234,12 @@ class _GroupedListViewState<T, E> extends State<GroupedListView<T, E>> {
   RenderBox? _headerBox;
   RenderBox? _listBox;
 
+  /// Fix for backwards compatability
+  ///
+  /// See:
+  /// * https://docs.flutter.dev/development/tools/sdk/release-notes/release-notes-3.0.0#your-code
+  I? _ambiguate<I>(I? value) => value;
+
   @override
   void initState() {
     _controller = widget.controller ?? ScrollController();
@@ -262,7 +268,7 @@ class _GroupedListViewState<T, E> extends State<GroupedListView<T, E>> {
     var isSeparator = widget.reverse ? (int i) => i.isOdd : (int i) => i.isEven;
 
     if (widget.reverse) {
-      WidgetsBinding.instance.addPostFrameCallback((_) {
+      _ambiguate(WidgetsBinding.instance)!.addPostFrameCallback((_) {
         _scrollListener();
       });
     }
