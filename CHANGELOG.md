@@ -1,3 +1,7 @@
+## [5.1.1] - 28.05.2022
+
+* Support older sdk versions
+
 ## [5.1.0] - 28.05.2022
 
 * Make package backwards compatible to Flutter < 3.0.0 

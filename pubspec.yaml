@@ -1,9 +1,8 @@
 name: grouped_list
 description: A Flutter ListView where the list items can be grouped into sections.
-version: 5.1.0
+version: 5.1.1
 homepage: https://begnis.dev
 repository: https://github.com/Dimibe/grouped_list
-
 
 environment:
   sdk: ">=2.12.0 <3.0.0"
