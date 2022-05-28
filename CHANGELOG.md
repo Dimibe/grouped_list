@@ -1,3 +1,7 @@
+## [5.1.0] - 28.05.2022
+
+* Make package backwards compatible to Flutter < 3.0.0 
+* Bugfix: package does not modify passed element list anymore
 
 ## [5.0.1] - 18.05.2022
 
