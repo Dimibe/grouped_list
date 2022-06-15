@@ -1,10 +1,11 @@
 # Grouped list package for Flutter.
-[![Pub](https://img.shields.io/pub/v/grouped_list.svg)](https://pub.dev/packages/grouped_list)
-![CI](https://github.com/Dimibe/grouped_list/workflows/CI/badge.svg?branch=master)
+[![pub package](https://img.shields.io/pub/v/grouped_list.svg)](https://pub.dev/packages/grouped_list)
+[![package publisher](https://img.shields.io/pub/publisher/grouped_list.svg)](https://pub.dev/packages/grouped_list)
+![build](https://github.com/Dimibe/grouped_list/workflows/CI/badge.svg?branch=main)
  
 A flutter `ListView` in which list items can be grouped to sections.
 
-<img src="https://raw.githubusercontent.com/Dimibe/grouped_list/master/assets/chat_example.png" width="300"><img src="https://raw.githubusercontent.com/Dimibe/grouped_list/master/assets/example.png" width="300">
+<img src="https://raw.githubusercontent.com/Dimibe/grouped_list/main/assets/chat_example.png" width="300"><img src="https://raw.githubusercontent.com/Dimibe/grouped_list/main/assets/example.png" width="300">
 
 #### Features
 * Sound null safety support!
