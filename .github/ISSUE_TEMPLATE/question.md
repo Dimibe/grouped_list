@@ -1,8 +1,8 @@
 ---
-name: Question
-about: Describe this issue template's purpose here.
+name: Help wanted
+about: Ask a question about grouped_list and it's usage
 title: ''
-labels: question
+labels: help wanted
 assignees: ''
 
 ---

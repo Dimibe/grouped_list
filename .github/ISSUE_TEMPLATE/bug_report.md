@@ -13,7 +13,7 @@ A clear and concise description of what the bug is.
 **Expected behavior**
 A clear and concise description of what you expected to happen.
 
-**Smartphone (please complete the following information):**
+**Information:**
  - Dart version:
  - Flutter version:
  - Platform:
