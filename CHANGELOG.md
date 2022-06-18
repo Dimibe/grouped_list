@@ -1,3 +1,7 @@
+## [5.1.2] - 18.06.2022
+
+* Documentation improvements
+
 ## [5.1.1] - 28.05.2022
 
 * Support older sdk versions
