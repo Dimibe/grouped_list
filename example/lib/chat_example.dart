@@ -54,58 +54,65 @@ class MyApp extends StatelessWidget {
                   floatingHeader: true,
                   useStickyGroupSeparators: true,
                   groupBy: (Element element) => DateTime(
-                      element.date.year, element.date.month, element.date.day),
-                  groupHeaderBuilder: (Element element) => SizedBox(
-                    height: 40,
-                    child: Align(
-                      child: Container(
-                        width: 120,
-                        decoration: const BoxDecoration(
-                          color: Colors.blue,
-                          borderRadius: BorderRadius.all(Radius.circular(10.0)),
-                        ),
-                        child: Padding(
-                          padding: const EdgeInsets.all(8.0),
-                          child: Text(
-                            DateFormat.yMMMd().format(element.date),
-                            textAlign: TextAlign.center,
-                          ),
-                        ),
-                      ),
-                    ),
+                    element.date.year,
+                    element.date.month,
+                    element.date.day,
                   ),
-                  itemBuilder: (_, Element element) {
-                    return Align(
-                      alignment: element.sender
-                          ? Alignment.centerRight
-                          : Alignment.centerLeft,
-                      child: SizedBox(
-                        width: MediaQuery.of(context).size.width * 0.9,
-                        child: Card(
-                          shape: RoundedRectangleBorder(
-                            borderRadius: BorderRadius.circular(6.0),
-                          ),
-                          elevation: 8.0,
-                          margin: const EdgeInsets.symmetric(
-                              horizontal: 10.0, vertical: 6.0),
-                          child: ListTile(
-                            contentPadding: const EdgeInsets.symmetric(
-                                horizontal: 20.0, vertical: 10.0),
-                            leading: element.sender
-                                ? Text(DateFormat.Hm().format(element.date))
-                                : const Icon(Icons.person),
-                            title: Text(element.name),
-                            trailing: element.sender
-                                ? const Icon(Icons.person_outline)
-                                : Text(DateFormat.Hm().format(element.date)),
-                          ),
-                        ),
-                      ),
-                    );
-                  },
+                  groupHeaderBuilder: _createGroupHeader,
+                  itemBuilder: (_, Element element) =>
+                      _createItem(context, element),
                 ),
               ),
             ],
+          ),
+        ),
+      ),
+    );
+  }
+
+  Widget _createGroupHeader(Element element) {
+    return SizedBox(
+      height: 40,
+      child: Align(
+        child: Container(
+          width: 120,
+          decoration: const BoxDecoration(
+            color: Colors.blue,
+            borderRadius: BorderRadius.all(Radius.circular(10.0)),
+          ),
+          child: Padding(
+            padding: const EdgeInsets.all(8.0),
+            child: Text(
+              DateFormat.yMMMd().format(element.date),
+              textAlign: TextAlign.center,
+            ),
+          ),
+        ),
+      ),
+    );
+  }
+
+  Widget _createItem(BuildContext ctx, Element element) {
+    return Align(
+      alignment: element.sender ? Alignment.centerRight : Alignment.centerLeft,
+      child: SizedBox(
+        width: MediaQuery.of(ctx).size.width * 0.9,
+        child: Card(
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(6.0),
+          ),
+          elevation: 8.0,
+          margin: const EdgeInsets.symmetric(horizontal: 10.0, vertical: 6.0),
+          child: ListTile(
+            contentPadding:
+                const EdgeInsets.symmetric(horizontal: 20.0, vertical: 10.0),
+            leading: element.sender
+                ? Text(DateFormat.Hm().format(element.date))
+                : const Icon(Icons.person),
+            title: Text(element.name),
+            trailing: element.sender
+                ? const Icon(Icons.person_outline)
+                : Text(DateFormat.Hm().format(element.date)),
           ),
         ),
       ),
