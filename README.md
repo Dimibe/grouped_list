@@ -1,4 +1,3 @@
-# Grouped list package for Flutter.
 [![pub package](https://img.shields.io/pub/v/grouped_list.svg)](https://pub.dev/packages/grouped_list)
 [![package publisher](https://img.shields.io/pub/publisher/grouped_list.svg)](https://pub.dev/packages/grouped_list)
 ![build](https://github.com/Dimibe/grouped_list/actions/workflows/dart.yaml/badge.svg??branch=main)
@@ -7,7 +6,7 @@ A flutter `ListView` in which list items can be grouped to sections.
 
 <img src="https://raw.githubusercontent.com/Dimibe/grouped_list/main/assets/chat_example.png" width="300"><img src="https://raw.githubusercontent.com/Dimibe/grouped_list/main/assets/example.png" width="300">
 
-#### Features
+### Features
 * Sound null safety support!
 * Easy creation of chat dialog.
 * List Items can be separated in groups.
@@ -61,22 +60,19 @@ import 'package:grouped_list/grouped_list.dart';
 **Also the fields from `ListView.builder` can be used.** 
 
 
-#### Highlight - SilverGroupedList
+### Highlight - SilverGroupedList
 
 Now supporting a grouped list based on a silver list. Just use `SilverGroupedListView` instead of `GroupedListView`. An example can be found under `example/lib/example_silver`.
 Note that some options of the `GroupedListView` are currently not available in `SilverGroupedListView`.
 
 
-#### Highlight - Chat Dialog
+### Highlight - Chat Dialog
 
 Easy creation of chat dialogs.
 Just set the option `reverse` to `true` and `order` to `GroupedListOrder.DESC`. A full example can be found in the examples.
 The list will be scrolled to the end in the initial state and therefore scrolling will be against redeaing direction. 
 
 
-### My other packages : 
+## Difference between grouped_list and sticky_grouped_list: 
 
-**For easy creation of chat-like dialogs:**
-
-Check out my other package [StickyGroupedList](https://pub.dev/packages/sticky_grouped_list), which is based on the scrollable_positioned_list.
-
+The list views in this package are based on the default flutter listview and the silver list. The package [StickyGroupedList](https://pub.dev/packages/sticky_grouped_list) is based on the [scrollable_positioned_list](https://pub.dev/packages/scrollable_positioned_list) which enables the possibility to programatically scroll to certain positions in the list. So if you need the ability to programatically scroll the list use the [StickyGroupedList](https://pub.dev/packages/sticky_grouped_list) otherwise I would recommend to use this package.
