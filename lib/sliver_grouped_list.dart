@@ -148,9 +148,11 @@ class _SliverGroupedListViewState<T, E>
             compareResult = widget.itemComparator!(e1, e2);
           } else if (e1 is Comparable) {
             compareResult = e1.compareTo(e2);
+          } else {
+            compareResult = 0;
           }
         }
-        return compareResult!;
+        return compareResult;
       });
       if (widget.order == GroupedListOrder.DESC) {
         elements = elements.reversed.toList();
