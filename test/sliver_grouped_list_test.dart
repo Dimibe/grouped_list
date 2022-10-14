@@ -13,7 +13,7 @@ final List _elements = [
 ];
 
 void main() {
-  Widget _buildApp(List elements) {
+  Widget buildApp(List elements) {
     return MaterialApp(
       home: Scaffold(
         body: SizedBox(
@@ -40,7 +40,7 @@ void main() {
 
   testWidgets('finds elemets and group separators',
       (WidgetTester tester) async {
-    await tester.pumpWidget(_buildApp(_elements));
+    await tester.pumpWidget(buildApp(_elements));
 
     expect(find.text('John'), findsOneWidget);
     expect(find.text('Team A'), findsOneWidget);
@@ -56,12 +56,12 @@ void main() {
   });
 
   testWidgets('empty list', (WidgetTester tester) async {
-    await tester.pumpWidget(_buildApp([]));
+    await tester.pumpWidget(buildApp([]));
   });
 
   testWidgets('finds only one group separator per group',
       (WidgetTester tester) async {
-    await tester.pumpWidget(_buildApp(_elements));
+    await tester.pumpWidget(buildApp(_elements));
     expect(find.text('Team B'), findsOneWidget);
   });
 }
