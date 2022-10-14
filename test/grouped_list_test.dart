@@ -13,7 +13,7 @@ final List _elements = [
 ];
 
 void main() {
-  Widget _buildApp(List elements, {bool reverse = false}) {
+  Widget buildApp(List elements, {bool reverse = false}) {
     return MaterialApp(
       home: Scaffold(
         body: SizedBox(
@@ -38,7 +38,7 @@ void main() {
 
   testWidgets('finds elemets and group separators',
       (WidgetTester tester) async {
-    await tester.pumpWidget(_buildApp(_elements));
+    await tester.pumpWidget(buildApp(_elements));
 
     expect(find.text('John'), findsOneWidget);
     expect(find.text('Team A'), findsOneWidget);
@@ -55,7 +55,7 @@ void main() {
 
   testWidgets('finds elemets and group separators with reverse list',
       (WidgetTester tester) async {
-    await tester.pumpWidget(_buildApp(_elements, reverse: true));
+    await tester.pumpWidget(buildApp(_elements, reverse: true));
 
     expect(find.text('John'), findsOneWidget);
     expect(find.text('Team A'), findsOneWidget);
@@ -72,16 +72,16 @@ void main() {
   });
 
   testWidgets('empty list', (WidgetTester tester) async {
-    await tester.pumpWidget(_buildApp([]));
+    await tester.pumpWidget(buildApp([]));
   });
 
   testWidgets('empty reversed list', (WidgetTester tester) async {
-    await tester.pumpWidget(_buildApp([], reverse: true));
+    await tester.pumpWidget(buildApp([], reverse: true));
   });
 
   testWidgets('finds only one group separator per group',
       (WidgetTester tester) async {
-    await tester.pumpWidget(_buildApp(_elements));
+    await tester.pumpWidget(buildApp(_elements));
     expect(find.text('Team B'), findsOneWidget);
   });
 }
