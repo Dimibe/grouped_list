@@ -55,6 +55,8 @@ class GroupedListView<T, E> extends StatefulWidget {
   /// 0 <= element < elements.length.
   final Widget Function(BuildContext context, T element)? itemBuilder;
 
+  final Widget Function(BuildContext context, T element, bool groupStart, bool groupEnd)? groupItemBuilder;
+
   /// Called to build children for the list with
   /// 0 <= element, index < elements.length
   final Widget Function(BuildContext context, T element, int index)?
@@ -206,6 +208,7 @@ class GroupedListView<T, E> extends StatefulWidget {
     this.groupHeaderBuilder,
     this.emptyPlaceholder,
     this.itemBuilder,
+    this.groupItemBuilder,
     this.indexedItemBuilder,
     this.itemComparator,
     this.order = GroupedListOrder.ASC,
@@ -282,6 +285,7 @@ class _GroupedListViewState<T, E> extends State<GroupedListView<T, E>> {
     _sortedElements = _sortElements();
     var hiddenIndex = widget.reverse ? _sortedElements.length * 2 - 1 : 0;
     var isSeparator = widget.reverse ? (int i) => i.isOdd : (int i) => i.isEven;
+    isValidIndex(int i) => i >= 0 && i < _sortedElements.length;
 
     if (widget.reverse) {
       _ambiguate(WidgetsBinding.instance)!.addPostFrameCallback((_) {
@@ -304,16 +308,18 @@ class _GroupedListViewState<T, E> extends State<GroupedListView<T, E>> {
           child: _buildGroupSeparator(_sortedElements[actualIndex]),
         );
       }
+      var curr = widget.groupBy(_sortedElements[actualIndex]);
+      var preIndex = actualIndex + (widget.reverse ? 1 : -1);
+      var prev = isValidIndex(preIndex) ? widget.groupBy(_sortedElements[preIndex]) : null;
+      var nextIndex = actualIndex + (widget.reverse ? -1 : 1);
+      var next = isValidIndex(nextIndex) ? widget.groupBy(_sortedElements[nextIndex]) : null;
       if (isSeparator(index)) {
-        var curr = widget.groupBy(_sortedElements[actualIndex]);
-        var prev = widget
-            .groupBy(_sortedElements[actualIndex + (widget.reverse ? 1 : -1)]);
         if (prev != curr) {
           return _buildGroupSeparator(_sortedElements[actualIndex]);
         }
         return widget.separator;
       }
-      return _buildItem(context, actualIndex);
+      return _buildItem(context, actualIndex, prev != curr, curr != next);
     }
 
     return Stack(
@@ -357,15 +363,19 @@ class _GroupedListViewState<T, E> extends State<GroupedListView<T, E>> {
 
   /// Returns the widget for element positioned at [index]. The widget is
   /// retrieved either by [widget.indexedItemBuilder] or [widget.itemBuilder].
-  Widget _buildItem(context, int index) {
+  Widget _buildItem(context, int index, bool groupStart, bool groupEnd) {
     final key = _keys.putIfAbsent('$index', () => GlobalKey());
     final value = _sortedElements[index];
-    return KeyedSubtree(
-      key: key,
-      child: widget.indexedItemBuilder != null
+    Widget? item;
+    if (groupStart || groupEnd) {
+      item = widget.groupItemBuilder != null
+          ? widget.groupItemBuilder!(context, value, groupStart, groupEnd)
+          : null;
+    }
+    item ??= widget.indexedItemBuilder != null
           ? widget.indexedItemBuilder!(context, value, index)
-          : widget.itemBuilder!(context, value),
-    );
+          : widget.itemBuilder!(context, value);
+    return KeyedSubtree(key: key, child: item);
   }
 
   /// This scroll listener is added to the lists controller if
