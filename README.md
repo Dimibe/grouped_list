@@ -1,7 +1,7 @@
 # Grouped list package for Flutter.
 [![pub package](https://img.shields.io/pub/v/grouped_list.svg)](https://pub.dev/packages/grouped_list)
 [![package publisher](https://img.shields.io/pub/publisher/grouped_list.svg)](https://pub.dev/packages/grouped_list)
-![build](https://github.com/Dimibe/grouped_list/actions/workflows/dart.yaml/badge.svg??branch=main)
+![build](https://github.com/Dimibe/grouped_list/actions/workflows/main.yaml/badge.svg??branch=main)
  
 A flutter `ListView` in which list items can be grouped to sections.
 
