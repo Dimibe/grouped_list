@@ -55,6 +55,10 @@ class GroupedListView<T, E> extends StatefulWidget {
   /// 0 <= element < elements.length.
   final Widget Function(BuildContext context, T element)? itemBuilder;
 
+  /// Called to build the children for the list where the current element
+  /// depends of the previous and next elements
+  final Widget Function(BuildContext context, T? previousElement, T currentElement, T? nextElement)? interdependentItemBuilder;
+
   /// Called to build children for the list with
   /// 0 <= element, index < elements.length
   final Widget Function(BuildContext context, T element, int index)?
@@ -207,6 +211,7 @@ class GroupedListView<T, E> extends StatefulWidget {
     this.emptyPlaceholder,
     this.itemBuilder,
     this.indexedItemBuilder,
+    this.interdependentItemBuilder,
     this.itemComparator,
     this.order = GroupedListOrder.ASC,
     this.sort = true,
@@ -231,7 +236,7 @@ class GroupedListView<T, E> extends StatefulWidget {
     this.restorationId,
     this.semanticChildCount,
     this.itemExtent,
-  })  : assert(itemBuilder != null || indexedItemBuilder != null),
+  })  : assert(itemBuilder != null || indexedItemBuilder != null || interdependentItemBuilder != null),
         assert(groupSeparatorBuilder != null || groupHeaderBuilder != null),
         super(key: key);
 
@@ -358,13 +363,25 @@ class _GroupedListViewState<T, E> extends State<GroupedListView<T, E>> {
   /// Returns the widget for element positioned at [index]. The widget is
   /// retrieved either by [widget.indexedItemBuilder] or [widget.itemBuilder].
   Widget _buildItem(context, int index) {
+    final int elementsLength = _sortedElements.length;
     final key = _keys.putIfAbsent('$index', () => GlobalKey());
     final value = _sortedElements[index];
     return KeyedSubtree(
       key: key,
       child: widget.indexedItemBuilder != null
           ? widget.indexedItemBuilder!(context, value, index)
-          : widget.itemBuilder!(context, value),
+          : widget.interdependentItemBuilder != null
+              ? widget.interdependentItemBuilder!(
+                context,
+                  index > 0
+                      ? _sortedElements[index-1]
+                      : null,
+                  _sortedElements[index],
+                  index+1 < elementsLength
+                      ? _sortedElements[index+1]
+                      : null,
+              )
+              : widget.itemBuilder!(context, value),
     );
   }
 
