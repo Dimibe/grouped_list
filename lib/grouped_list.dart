@@ -362,13 +362,11 @@ class _GroupedListViewState<T, E> extends State<GroupedListView<T, E>> {
 
   /// Returns the widget for element positioned at [index]. The widget is
   /// retrieved either by [widget.indexedItemBuilder] or [widget.itemBuilder].
-  Widget _buildItem(context, int index) {
-    final key = _keys.putIfAbsent('$index', () => GlobalKey());
-    final value = _sortedElements[index];
-    return KeyedSubtree(
-      key: key,
+  Widget _buildItem(context, int index) =>
+    KeyedSubtree(
+      key: _keys.putIfAbsent('$index', () => GlobalKey()),
       child: widget.indexedItemBuilder != null
-          ? widget.indexedItemBuilder!(context, value, index)
+          ? widget.indexedItemBuilder!(context, _sortedElements[index], index)
           : widget.interdependentItemBuilder != null
               ? widget.interdependentItemBuilder!(
                 context,
@@ -380,9 +378,8 @@ class _GroupedListViewState<T, E> extends State<GroupedListView<T, E>> {
                       ? _sortedElements[index+1]
                       : null,
               )
-              : widget.itemBuilder!(context, value),
+              : widget.itemBuilder!(context, _sortedElements[index]),
     );
-  }
 
   /// This scroll listener is added to the lists controller if
   /// [widget.useStickyGroupSeparators] is `true`. In that case the scroll
