@@ -27,6 +27,8 @@ List<Element> _elements = [
       true),
 ];
 
+GlobalKey _groupListKey = GlobalKey();
+
 class MyApp extends StatelessWidget {
   const MyApp({Key? key}) : super(key: key);
 
@@ -48,6 +50,7 @@ class MyApp extends StatelessWidget {
               SizedBox(
                 height: MediaQuery.of(context).size.height * 0.8,
                 child: GroupedListView<Element, DateTime>(
+                  key: _groupListKey,
                   elements: _elements,
                   order: GroupedListOrder.DESC,
                   reverse: true,

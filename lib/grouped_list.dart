@@ -321,7 +321,6 @@ class _GroupedListViewState<T, E> extends State<GroupedListView<T, E>> {
       alignment: Alignment.topCenter,
       children: <Widget>[
         ListView.builder(
-          key: widget.key,
           scrollDirection: widget.scrollDirection,
           controller: _controller,
           primary: widget.primary,
