@@ -380,7 +380,7 @@ class _GroupedListViewState<T, E> extends State<GroupedListView<T, E>> {
     if (_sortedElements.isEmpty) {
       return;
     }
-    
+
     _listBox ??= _key.currentContext?.findRenderObject() as RenderBox?;
     var listPos = _listBox?.localToGlobal(Offset.zero).dy ?? 0;
     _headerBox ??=
