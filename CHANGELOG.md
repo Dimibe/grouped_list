@@ -1,3 +1,7 @@
+## [5.1.3] - 09.04.2023
+
+* Prepare for dart 3
+
 ## [5.1.2] - 18.06.2022
 
 * Documentation improvements
