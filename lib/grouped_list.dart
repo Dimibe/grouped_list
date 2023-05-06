@@ -44,11 +44,17 @@ class GroupedListView<T, E> extends StatefulWidget {
   /// Will be ignored if [groupHeaderBuilder] is used.
   final Widget Function(E value)? groupSeparatorBuilder;
 
-  /// Same as [groupSeparatorBuilder], will be called to build group separators
+  /// Called to build group separators for each group.
+  /// Value is always the [groupBy] result from the first element of the group.
+  ///
+  /// Will be ignored if [groupSeparatorBuilder] is used.
+  final Widget Function(E value, bool sticky)? groupStickyBuilder;
+
+  /// Same as [groupSeparatorBuilder] and [groupStickyBuilder], will be called to build group separators
   /// for each group.
   /// The passed element is always the first element of the group.
   ///
-  /// If defined [groupSeparatorBuilder] wont be used.
+  /// If defined [groupSeparatorBuilder] won't be used.
   final Widget Function(T element)? groupHeaderBuilder;
 
   /// Called to build children for the list with
@@ -204,6 +210,7 @@ class GroupedListView<T, E> extends StatefulWidget {
     this.groupComparator,
     this.groupSeparatorBuilder,
     this.groupHeaderBuilder,
+    this.groupStickyBuilder,
     this.emptyPlaceholder,
     this.itemBuilder,
     this.indexedItemBuilder,
@@ -232,7 +239,7 @@ class GroupedListView<T, E> extends StatefulWidget {
     this.semanticChildCount,
     this.itemExtent,
   })  : assert(itemBuilder != null || indexedItemBuilder != null),
-        assert(groupSeparatorBuilder != null || groupHeaderBuilder != null),
+        assert(groupSeparatorBuilder != null || groupStickyBuilder != null || groupHeaderBuilder != null),
         super(key: key);
 
   @override
@@ -301,7 +308,7 @@ class _GroupedListViewState<T, E> extends State<GroupedListView<T, E>> {
       if (index == hiddenIndex) {
         return Opacity(
           opacity: widget.useStickyGroupSeparators ? 0 : 1,
-          child: _buildGroupSeparator(_sortedElements[actualIndex]),
+          child: _buildGroupSeparator(_sortedElements[actualIndex], false),
         );
       }
       if (isSeparator(index)) {
@@ -309,7 +316,7 @@ class _GroupedListViewState<T, E> extends State<GroupedListView<T, E>> {
         var prev = widget
             .groupBy(_sortedElements[actualIndex + (widget.reverse ? 1 : -1)]);
         if (prev != curr) {
-          return _buildGroupSeparator(_sortedElements[actualIndex]);
+          return _buildGroupSeparator(_sortedElements[actualIndex], false);
         }
         return widget.separator;
       }
@@ -476,7 +483,7 @@ class _GroupedListViewState<T, E> extends State<GroupedListView<T, E>> {
         color:
             widget.floatingHeader ? null : widget.stickyHeaderBackgroundColor,
         width: widget.floatingHeader ? null : MediaQuery.of(context).size.width,
-        child: _buildGroupSeparator(topElement),
+        child: _buildGroupSeparator(topElement, true),
       );
     }
     return const SizedBox.shrink();
@@ -484,10 +491,13 @@ class _GroupedListViewState<T, E> extends State<GroupedListView<T, E>> {
 
   /// Returns the group header [Widget] for an [element] based on
   /// [widget.groupHeaderBuilder] or if null on the
-  /// [widget.groupSeparatorBuilder].
-  Widget _buildGroupSeparator(T element) {
+  /// [widget.groupSeparatorBuilder]/[widget.groupStickyBuilder].
+  Widget _buildGroupSeparator(T element, bool sticky) {
     if (widget.groupHeaderBuilder == null) {
-      return widget.groupSeparatorBuilder!(widget.groupBy(element));
+      if (widget.groupSeparatorBuilder != null)
+        return widget.groupSeparatorBuilder!(widget.groupBy(element));
+      if (widget.groupStickyBuilder != null)
+        return widget.groupStickyBuilder!(widget.groupBy(element), sticky);
     }
     return widget.groupHeaderBuilder!(element);
   }
