@@ -189,6 +189,9 @@ class GroupedListView<T, E> extends StatefulWidget {
   /// the scroll position changes drastically.
   final double? itemExtent;
 
+  /// Widget to be placed at the bottom of the list.
+  final Widget? bottomWidget;
+
   /// Creates a [GroupedListView].
   /// This constructor requires that [elements] and [groupBy] are provieded.
   /// [elements] defines a list of elements which are displayed in the list and
@@ -231,6 +234,7 @@ class GroupedListView<T, E> extends StatefulWidget {
     this.restorationId,
     this.semanticChildCount,
     this.itemExtent,
+    this.bottomWidget,
   })  : assert(itemBuilder != null || indexedItemBuilder != null),
         assert(groupSeparatorBuilder != null || groupHeaderBuilder != null),
         super(key: key);
@@ -297,6 +301,10 @@ class _GroupedListViewState<T, E> extends State<GroupedListView<T, E>> {
     /// If the [index] points to an separator and the previous and next items
     /// are in different groups, a group header widget is displayed.
     Widget itemBuilder(context, index) {
+
+      if (widget.bottomWidget != null && index == _sortedElements.length * 2) {
+        return widget.bottomWidget!;
+      }
       var actualIndex = index ~/ 2;
       if (index == hiddenIndex) {
         return Opacity(
@@ -334,7 +342,7 @@ class _GroupedListViewState<T, E> extends State<GroupedListView<T, E>> {
           restorationId: widget.restorationId,
           keyboardDismissBehavior: widget.keyboardDismissBehavior,
           semanticChildCount: widget.semanticChildCount,
-          itemCount: _sortedElements.length * 2,
+          itemCount: widget.bottomWidget == null ? _sortedElements.length * 2 : (_sortedElements.length * 2) + 1,
           addAutomaticKeepAlives: widget.addAutomaticKeepAlives,
           addRepaintBoundaries: widget.addRepaintBoundaries,
           addSemanticIndexes: widget.addSemanticIndexes,
