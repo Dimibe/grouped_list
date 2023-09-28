@@ -1,6 +1,33 @@
-## [4.1.1] - 22.11.2021
+## [5.1.3] - 09.04.2023
 
-* Add `groupStickyHeaderBuilder` to support different widget for the sticky header.
+* Prepare for dart 3
+
+## [5.1.2] - 18.06.2022
+
+* Documentation improvements
+
+## [5.1.1] - 28.05.2022
+
+* Support older sdk versions
+
+## [5.1.0] - 28.05.2022
+
+* Make package backwards compatible to Flutter < 3.0.0 
+* Bugfix: package does not modify passed element list anymore
+
+## [5.0.1] - 18.05.2022
+
+* Bugfix: Fix lint error 
+
+## [5.0.0] - 18.05.2022
+
+* Feature: Upgrade to flutter 3.0 and use flutter_lints [Pull Request #148](https://github.com/Dimibe/grouped_list/pull/148) 
+* Bugfix: Fixes update to version 3.0 of flutter [Pull Request #147](https://github.com/Dimibe/grouped_list/pull/147) 
+* Bugfix: Resolve out of range error [Pull Request #138](https://github.com/Dimibe/grouped_list/pull/138) 
+
+## [4.2.0] - 04.02.2022
+
+* Bugfixes: Fix bug where item is rebuild every time state changes [Pull Request #132](https://github.com/Dimibe/grouped_list/pull/132) 
 
 ## [4.1.0] - 22.07.2021
 

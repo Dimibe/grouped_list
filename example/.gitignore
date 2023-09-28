@@ -21,6 +21,7 @@
 #.vscode/
 
 # Flutter/Dart/Pub related
+/pubspec.lock
 **/doc/api/
 **/ios/Flutter/.last_build_id
 .dart_tool/
@@ -30,6 +31,7 @@
 .pub-cache/
 .pub/
 /build/
+/web/
 
 # Web related
 lib/generated_plugin_registrant.dart

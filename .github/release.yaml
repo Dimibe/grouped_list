@@ -1,0 +1,12 @@
+changelog:
+  categories:
+    - title: 🏕 Features
+      labels:
+        - new feature
+        - improvement
+    - title: 🐛 Bug Fixes
+      labels:
+          - bug
+    - title: 👒 Dependencies
+      labels:
+        - dependencies

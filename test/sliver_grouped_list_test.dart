@@ -13,10 +13,10 @@ final List _elements = [
 ];
 
 void main() {
-  Widget _buildApp(List elements) {
+  Widget buildApp(List elements) {
     return MaterialApp(
       home: Scaffold(
-        body: Container(
+        body: SizedBox(
           height: 550,
           child: CustomScrollView(
             slivers: [
@@ -25,8 +25,8 @@ void main() {
                 elements: _elements,
                 order: GroupedListOrder.ASC,
                 groupSeparatorBuilder: (dynamic element) =>
-                    Container(height: 50, child: Text('$element')),
-                itemBuilder: (_, dynamic element) => Container(
+                    SizedBox(height: 50, child: Text('$element')),
+                itemBuilder: (_, dynamic element) => SizedBox(
                   height: 100,
                   child: Text(element['name']),
                 ),
@@ -40,7 +40,7 @@ void main() {
 
   testWidgets('finds elemets and group separators',
       (WidgetTester tester) async {
-    await tester.pumpWidget(_buildApp(_elements));
+    await tester.pumpWidget(buildApp(_elements));
 
     expect(find.text('John'), findsOneWidget);
     expect(find.text('Team A'), findsOneWidget);
@@ -56,12 +56,12 @@ void main() {
   });
 
   testWidgets('empty list', (WidgetTester tester) async {
-    await tester.pumpWidget(_buildApp([]));
+    await tester.pumpWidget(buildApp([]));
   });
 
   testWidgets('finds only one group separator per group',
       (WidgetTester tester) async {
-    await tester.pumpWidget(_buildApp(_elements));
+    await tester.pumpWidget(buildApp(_elements));
     expect(find.text('Team B'), findsOneWidget);
   });
 }

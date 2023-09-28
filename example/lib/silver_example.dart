@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:grouped_list/sliver_grouped_list.dart';
 
-void main() => runApp(MyApp());
+void main() => runApp(const MyApp());
 
 List _elements = [
   {'name': 'John', 'group': 'Team A'},
@@ -13,6 +13,8 @@ List _elements = [
 ];
 
 class MyApp extends StatelessWidget {
+  const MyApp({Key? key}) : super(key: key);
+
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
@@ -23,7 +25,7 @@ class MyApp extends StatelessWidget {
       ),
       home: Scaffold(
         appBar: AppBar(
-          title: Text('Grouped List View Example'),
+          title: const Text('Grouped List View Example'),
         ),
         body: CustomScrollView(
           slivers: [
@@ -39,20 +41,22 @@ class MyApp extends StatelessWidget {
                 child: Text(
                   value,
                   textAlign: TextAlign.center,
-                  style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
+                  style: const TextStyle(
+                      fontSize: 20, fontWeight: FontWeight.bold),
                 ),
               ),
               itemBuilder: (c, element) {
                 return Card(
                   elevation: 8.0,
-                  margin: EdgeInsets.symmetric(horizontal: 10.0, vertical: 6.0),
-                  child: Container(
+                  margin: const EdgeInsets.symmetric(
+                      horizontal: 10.0, vertical: 6.0),
+                  child: SizedBox(
                     child: ListTile(
-                      contentPadding: EdgeInsets.symmetric(
+                      contentPadding: const EdgeInsets.symmetric(
                           horizontal: 20.0, vertical: 10.0),
-                      leading: Icon(Icons.account_circle),
+                      leading: const Icon(Icons.account_circle),
                       title: Text(element['name']),
-                      trailing: Icon(Icons.arrow_forward),
+                      trailing: const Icon(Icons.arrow_forward),
                     ),
                   ),
                 );

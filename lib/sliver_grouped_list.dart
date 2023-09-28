@@ -1,10 +1,11 @@
 import 'dart:collection';
 import 'package:flutter/widgets.dart';
 
-import 'src/GroupedListOrder.dart';
+import 'src/grouped_list_order.dart';
 
-export 'src/GroupedListOrder.dart';
+export 'src/grouped_list_order.dart';
 
+@immutable
 class SliverGroupedListView<T, E> extends StatefulWidget {
   /// Items of which [itemBuilder] or [indexedItemBuilder] produce the list.
   final List<T> elements;
@@ -64,7 +65,7 @@ class SliverGroupedListView<T, E> extends StatefulWidget {
   final Widget separator;
 
   /// Creates a [SliverGroupedListView]
-  SliverGroupedListView({
+  const SliverGroupedListView({
     Key? key,
     required this.elements,
     required this.groupBy,
@@ -94,7 +95,7 @@ class _SliverGroupedListViewState<T, E>
   Widget build(BuildContext context) {
     _sortedElements = _sortElements();
     var hiddenIndex = 0;
-    var _isSeparator = (int i) => i.isEven;
+    isSeparator(int i) => i.isEven;
 
     return SliverList(
         delegate: SliverChildBuilderDelegate((context, index) {
@@ -105,7 +106,7 @@ class _SliverGroupedListViewState<T, E>
           child: _buildGroupSeparator(_sortedElements[actualIndex]),
         );
       }
-      if (_isSeparator(index)) {
+      if (isSeparator(index)) {
         var curr = widget.groupBy(_sortedElements[actualIndex]);
         var prev = widget.groupBy(_sortedElements[actualIndex - 1]);
         if (prev != curr) {
@@ -129,10 +130,10 @@ class _SliverGroupedListViewState<T, E>
   }
 
   List<T> _sortElements() {
-    var elements = widget.elements;
+    var elements = [...widget.elements];
     if (widget.sort && elements.isNotEmpty) {
       elements.sort((e1, e2) {
-        var compareResult;
+        int? compareResult;
         // compare groups
         if (widget.groupComparator != null) {
           compareResult =
@@ -142,14 +143,14 @@ class _SliverGroupedListViewState<T, E>
               .compareTo(widget.groupBy(e2) as Comparable);
         }
         // compare elements inside group
-        if ((compareResult == null || compareResult == 0)) {
+        if (compareResult == null || compareResult == 0) {
           if (widget.itemComparator != null) {
             compareResult = widget.itemComparator!(e1, e2);
           } else if (e1 is Comparable) {
             compareResult = e1.compareTo(e2);
           }
         }
-        return compareResult;
+        return compareResult!;
       });
       if (widget.order == GroupedListOrder.DESC) {
         elements = elements.reversed.toList();

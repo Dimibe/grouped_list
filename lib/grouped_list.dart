@@ -5,19 +5,21 @@ import 'dart:math' as math;
 import 'package:flutter/gestures.dart';
 import 'package:flutter/widgets.dart';
 
-import 'src/GroupedListOrder.dart';
+import 'src/grouped_list_order.dart';
 
-export 'src/GroupedListOrder.dart';
+export 'src/grouped_list_order.dart';
 
 /// A groupable list of widgets similar to [ListView], execpt that the
 /// items can be sectioned into groups.
 ///
 /// See [ListView.builder]
+///
+@immutable
 class GroupedListView<T, E> extends StatefulWidget {
   /// Items of which [itemBuilder] or [indexedItemBuilder] produce the list.
   final List<T> elements;
 
-  /// Defines which elements are grouped together.
+  /// Defines which [elements] are grouped together.
   ///
   /// Function is called for each element in the list, when equal for two
   /// elements, those two belong to the same group.
@@ -29,14 +31,15 @@ class GroupedListView<T, E> extends StatefulWidget {
   /// specific [Comparable] implementation.
   final int Function(E value1, E value2)? groupComparator;
 
-  /// Can be used to define a custom sorting for the elements inside each group.
+  /// Can be used to define a custom sorting for the [elements] inside each
+  /// group.
   ///
-  /// If not set elements will be sorted with their natural sorting order or
+  /// If not set [elements] will be sorted with their natural sorting order or
   /// their specific [Comparable] implementation.
   final int Function(T element1, T element2)? itemComparator;
 
   /// Called to build group separators for each group.
-  /// Value is always the groupBy result from the first element of the group.
+  /// Value is always the [groupBy] result from the first element of the group.
   ///
   /// Will be ignored if [groupHeaderBuilder] is used.
   final Widget Function(E value)? groupSeparatorBuilder;
@@ -59,27 +62,38 @@ class GroupedListView<T, E> extends StatefulWidget {
   /// 0 <= element < elements.length.
   final Widget Function(BuildContext context, T element)? itemBuilder;
 
+  /// Called to build the children for the list where the current element
+  /// depends of the previous and next elements
+  final Widget Function(BuildContext context, T? previousElement,
+      T currentElement, T? nextElement)? interdependentItemBuilder;
+
   /// Called to build children for the list with
   /// 0 <= element, index < elements.length
   final Widget Function(BuildContext context, T element, int index)?
       indexedItemBuilder;
 
+  /// This widget is displayed if the list is contains no [elements] and thus is
+  /// empty.
+  ///
+  /// If no defined nothing will be displayed.
+  final Widget? emptyPlaceholder;
+
   /// Whether the order of the list is ascending or descending.
   ///
-  /// Defaults to ASC.
+  /// Defaults to [GroupedListOrder.ASC].
   final GroupedListOrder order;
 
-  /// Whether the elements will be sorted or not. If not it must be done
-  ///  manually.
+  /// Whether the [elements] will be sorted or not. If not it must be done
+  /// manually.
   ///
-  /// Defauts to true.
+  /// Defauts to `true`.
   final bool sort;
 
-  /// When set to true the group header of the current visible group will stick
-  ///  on top.
+  /// When set to `true` the group header of the current visible group will
+  /// stick on top.
   final bool useStickyGroupSeparators;
 
-  /// Called to build separators for between each item in the list.
+  /// Called to build separators for between each element in the list.
   final Widget separator;
 
   /// Whether the group headers float over the list or occupy their own space.
@@ -174,7 +188,8 @@ class GroupedListView<T, E> extends StatefulWidget {
   ///
   /// See also:
   ///
-  ///  * [SemanticsConfiguration.scrollChildCount], the corresponding semantics property.
+  /// * [SemanticsConfiguration.scrollChildCount], the corresponding semantics
+  /// property.
   final int? semanticChildCount;
 
   /// If non-null, forces the children to have the given extent in the scroll
@@ -186,8 +201,15 @@ class GroupedListView<T, E> extends StatefulWidget {
   /// the scroll position changes drastically.
   final double? itemExtent;
 
-  /// Creates a [GroupedListView]
-  GroupedListView({
+  /// Creates a [GroupedListView].
+  /// This constructor requires that [elements] and [groupBy] are provieded.
+  /// [elements] defines a list of elements which are displayed in the list and
+  /// [groupBy] defindes a function which returns the value on which the
+  /// elements are grouped.
+  ///
+  /// Additionally at least one of [itemBuilder] or [indexedItemBuilder] and one
+  /// of [groupSeparatorBuilder] or [groupHeaderBuilder] must be provieded.
+  const GroupedListView({
     Key? key,
     required this.elements,
     required this.groupBy,
@@ -195,8 +217,10 @@ class GroupedListView<T, E> extends StatefulWidget {
     this.groupSeparatorBuilder,
     this.groupHeaderBuilder,
     this.groupStickyHeaderBuilder,
+    this.emptyPlaceholder,
     this.itemBuilder,
     this.indexedItemBuilder,
+    this.interdependentItemBuilder,
     this.itemComparator,
     this.order = GroupedListOrder.ASC,
     this.sort = true,
@@ -221,7 +245,9 @@ class GroupedListView<T, E> extends StatefulWidget {
     this.restorationId,
     this.semanticChildCount,
     this.itemExtent,
-  })  : assert(itemBuilder != null || indexedItemBuilder != null),
+  })  : assert(itemBuilder != null ||
+            indexedItemBuilder != null ||
+            interdependentItemBuilder != null),
         assert(groupSeparatorBuilder != null || groupHeaderBuilder != null),
         super(key: key);
 
@@ -239,6 +265,12 @@ class _GroupedListViewState<T, E> extends State<GroupedListView<T, E>> {
   int _topElementIndex = 0;
   RenderBox? _headerBox;
   RenderBox? _listBox;
+
+  /// Fix for backwards compatability
+  ///
+  /// See:
+  /// * https://docs.flutter.dev/development/tools/sdk/release-notes/release-notes-3.0.0#your-code
+  I? _ambiguate<I>(I? value) => value;
 
   @override
   void initState() {
@@ -265,13 +297,39 @@ class _GroupedListViewState<T, E> extends State<GroupedListView<T, E>> {
   Widget build(BuildContext context) {
     _sortedElements = _sortElements();
     var hiddenIndex = widget.reverse ? _sortedElements.length * 2 - 1 : 0;
-    var _isSeparator =
-        widget.reverse ? (int i) => i.isOdd : (int i) => i.isEven;
+    var isSeparator = widget.reverse ? (int i) => i.isOdd : (int i) => i.isEven;
 
     if (widget.reverse) {
-      WidgetsBinding.instance!.addPostFrameCallback((_) {
+      _ambiguate(WidgetsBinding.instance)!.addPostFrameCallback((_) {
         _scrollListener();
       });
+    }
+
+    /// The itemBuilder function for this package divides the [index] by two
+    /// because between each element a separator is displayed. Depending on the
+    /// direction of the list and if the [index] is even or odd either a item or
+    /// the separator widget is displayed.
+    ///
+    /// If the [index] points to an separator and the previous and next items
+    /// are in different groups, a group header widget is displayed.
+    Widget itemBuilder(context, index) {
+      var actualIndex = index ~/ 2;
+      if (index == hiddenIndex) {
+        return Opacity(
+          opacity: widget.useStickyGroupSeparators ? 0 : 1,
+          child: _buildGroupSeparator(_sortedElements[actualIndex]),
+        );
+      }
+      if (isSeparator(index)) {
+        var curr = widget.groupBy(_sortedElements[actualIndex]);
+        var prev = widget
+            .groupBy(_sortedElements[actualIndex + (widget.reverse ? 1 : -1)]);
+        if (prev != curr) {
+          return _buildGroupSeparator(_sortedElements[actualIndex]);
+        }
+        return widget.separator;
+      }
+      return _buildItem(context, actualIndex);
     }
 
     return Stack(
@@ -279,7 +337,6 @@ class _GroupedListViewState<T, E> extends State<GroupedListView<T, E>> {
       alignment: Alignment.topCenter,
       children: <Widget>[
         ListView.builder(
-          key: widget.key,
           scrollDirection: widget.scrollDirection,
           controller: _controller,
           primary: widget.primary,
@@ -298,25 +355,7 @@ class _GroupedListViewState<T, E> extends State<GroupedListView<T, E>> {
           addRepaintBoundaries: widget.addRepaintBoundaries,
           addSemanticIndexes: widget.addSemanticIndexes,
           cacheExtent: widget.cacheExtent,
-          itemBuilder: (context, index) {
-            var actualIndex = index ~/ 2;
-            if (index == hiddenIndex) {
-              return Opacity(
-                opacity: widget.useStickyGroupSeparators ? 0 : 1,
-                child: _buildGroupSeparator(_sortedElements[actualIndex]),
-              );
-            }
-            if (_isSeparator(index)) {
-              var curr = widget.groupBy(_sortedElements[actualIndex]);
-              var prev = widget.groupBy(
-                  _sortedElements[actualIndex + (widget.reverse ? 1 : -1)]);
-              if (prev != curr) {
-                return _buildGroupSeparator(_sortedElements[actualIndex]);
-              }
-              return widget.separator;
-            }
-            return _buildItem(context, actualIndex);
-          },
+          itemBuilder: itemBuilder,
         ),
         StreamBuilder<int>(
             stream: _streamController.stream,
@@ -325,24 +364,45 @@ class _GroupedListViewState<T, E> extends State<GroupedListView<T, E>> {
               if (snapshot.hasData) {
                 return _showFixedGroupHeader(snapshot.data!);
               }
-              return Container();
+              return const SizedBox.shrink();
             }),
       ],
     );
   }
 
-  Container _buildItem(context, int actualIndex) {
-    var key = GlobalKey();
-    _keys['$actualIndex'] = key;
-    return Container(
-        key: key,
-        child: widget.indexedItemBuilder == null
-            ? widget.itemBuilder!(context, _sortedElements[actualIndex])
-            : widget.indexedItemBuilder!(
-                context, _sortedElements[actualIndex], actualIndex));
-  }
+  /// Returns the widget for element positioned at [index]. The widget is
+  /// retrieved either by [widget.indexedItemBuilder], [widget.itemBuilder]
+  /// or [widget.interdependentItemBuilder].
+  Widget _buildItem(context, int index) => KeyedSubtree(
+        key: _keys.putIfAbsent('$index', () => GlobalKey()),
+        child: widget.indexedItemBuilder != null
+            ? widget.indexedItemBuilder!(context, _sortedElements[index], index)
+            : widget.interdependentItemBuilder != null
+                ? widget.interdependentItemBuilder!(
+                    context,
+                    index > 0 ? _sortedElements[index - 1] : null,
+                    _sortedElements[index],
+                    index + 1 < _sortedElements.length
+                        ? _sortedElements[index + 1]
+                        : null,
+                  )
+                : widget.itemBuilder!(context, _sortedElements[index]),
+      );
 
+  /// This scroll listener is added to the lists controller if
+  /// [widget.useStickyGroupSeparators] is `true`. In that case the scroll
+  /// listener keeps track of the top most element which is still in the view
+  /// and saves the elements index in order to be able to display the
+  /// corresponding groupHeader on top of the view.
+  ///
+  /// If the option [widget.useStickyGroupSeparators] is `false` this listener
+  /// is not required since the group headers are displayed inside the lists and
+  /// do not need to be always in the visible frame.
   void _scrollListener() {
+    if (_sortedElements.isEmpty) {
+      return;
+    }
+
     _listBox ??= _key.currentContext?.findRenderObject() as RenderBox?;
     var listPos = _listBox?.localToGlobal(Offset.zero).dy ?? 0;
     _headerBox ??=
@@ -365,7 +425,13 @@ class _GroupedListViewState<T, E> extends State<GroupedListView<T, E>> {
     var index = math.max(int.parse(topItemKey), 0);
     if (index != _topElementIndex) {
       var curr = widget.groupBy(_sortedElements[index]);
-      var prev = widget.groupBy(_sortedElements[_topElementIndex]);
+      E prev;
+
+      try {
+        prev = widget.groupBy(_sortedElements[_topElementIndex]);
+      } on RangeError catch (_) {
+        prev = widget.groupBy(_sortedElements[0]);
+      }
 
       if (prev != curr) {
         _topElementIndex = index;
@@ -374,11 +440,17 @@ class _GroupedListViewState<T, E> extends State<GroupedListView<T, E>> {
     }
   }
 
+  /// Sorts the [widget.elements] according the groups. If
+  /// [widget.groupComparator] is defined, it is used for sorting otherwise the
+  /// natural ordering of [widget.groupBy] is used for sorting.
+  ///
+  /// The elements inside a group are sorted accoring to [widget.itemComparator]
+  /// or their natural order.
   List<T> _sortElements() {
-    var elements = widget.elements;
+    var elements = [...widget.elements];
     if (widget.sort && elements.isNotEmpty) {
       elements.sort((e1, e2) {
-        var compareResult;
+        int? compareResult;
         // compare groups
         if (widget.groupComparator != null) {
           compareResult =
@@ -388,14 +460,14 @@ class _GroupedListViewState<T, E> extends State<GroupedListView<T, E>> {
               .compareTo(widget.groupBy(e2) as Comparable);
         }
         // compare elements inside group
-        if ((compareResult == null || compareResult == 0)) {
+        if (compareResult == null || compareResult == 0) {
           if (widget.itemComparator != null) {
             compareResult = widget.itemComparator!(e1, e2);
           } else if (e1 is Comparable) {
             compareResult = e1.compareTo(e2);
           }
         }
-        return compareResult;
+        return compareResult!;
       });
       if (widget.order == GroupedListOrder.DESC) {
         elements = elements.reversed.toList();
@@ -404,9 +476,15 @@ class _GroupedListViewState<T, E> extends State<GroupedListView<T, E>> {
     return elements;
   }
 
+  /// Returns the group header [Widget] for the given [topElementIndex].
+  ///
+  /// If the option [widget.useStickyGroupSeparators] is set to `true` a
+  /// [Container] with the group header [Widget] is returned.
+  ///
+  ///  Otherwise an empty [Widget] in form of [SizedBox.shrink] is returned.
   Widget _showFixedGroupHeader(int topElementIndex) {
     _groupHeaderKey = GlobalKey();
-    if (widget.useStickyGroupSeparators && widget.elements.isNotEmpty) {
+    if (widget.useStickyGroupSeparators && _sortedElements.isNotEmpty) {
       T topElement;
 
       try {
@@ -423,14 +501,12 @@ class _GroupedListViewState<T, E> extends State<GroupedListView<T, E>> {
         child: _buildFixedGroupHeader(topElement),
       );
     }
-    return Container();
+    return const SizedBox.shrink();
   }
 
-  bool _isListItemRendered(GlobalKey<State<StatefulWidget>> key) {
-    return key.currentContext != null &&
-        key.currentContext!.findRenderObject() != null;
-  }
-
+  /// Returns the group header [Widget] for an [element] based on
+  /// [widget.groupHeaderBuilder] or if null on the
+  /// [widget.groupSeparatorBuilder].
   Widget _buildGroupSeparator(T element) {
     if (widget.groupHeaderBuilder == null) {
       return widget.groupSeparatorBuilder!(widget.groupBy(element));
@@ -443,5 +519,12 @@ class _GroupedListViewState<T, E> extends State<GroupedListView<T, E>> {
       return _buildGroupSeparator(element);
     }
     return widget.groupStickyHeaderBuilder!(element);
+  }
+  
+  /// Checks if the list item with the given [key] is currently rendered in the
+  /// view frame.
+  bool _isListItemRendered(GlobalKey<State<StatefulWidget>> key) {
+    return key.currentContext != null &&
+        key.currentContext!.findRenderObject() != null;
   }
 }
