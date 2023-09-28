@@ -49,7 +49,8 @@ import 'package:grouped_list/grouped_list.dart';
 |`elements`| A list of the data you want to display in the list | required | - |
 |`groupBy` |Function which maps an element to its grouped value | required | - |
 |`itemBuilder` / `indexedItemBuilder`| Function which returns an Widget which defines the item. `indexedItemBuilder` provides the current index as well. If both are defined `indexedItemBuilder` is preferred| yes, either of them | - |
-|`groupSeparatorBuilder` / `groupHeaderBuilder`| Function which returns an Widget which defines the group headers. While `groupSeparatorBuilder` gets the `groupBy`-value as parameter `groupHeaderBuilder` gets the whole element. If both are defined `groupHeaderBuilder` is preferred| yes, either of them | - |
+|`groupSeparatorBuilder` / `groupHeaderBuilder`| Function which returns a Widget which defines the group headers. While `groupSeparatorBuilder` gets the `groupBy`-value as parameter `groupHeaderBuilder` gets the whole element. If both are defined `groupHeaderBuilder` is preferred| yes, either of them | - |
+|`groupStickyHeaderBuilder` | Function which returns a Widget which defines the sticky group header, when `useStickyGroupSeparators` is `true`. If not defined `groupSeparatorBuilder` or `groupHeaderBuilder` will be used as described above. | no | - |
 |`useStickyGroupSeparators` | When set to true the group header of the current visible group will stick on top | no | `false` |
 |`floatingHeader` | Whether the sticky group header float over the list or occupy it's own space | no | `false` |
 |`stickyHeaderBackgroundColor` | Defines the background color of the sticky header. Will only be used if `useStickyGroupSeparators` is used | no | `Color(0xffF7F7F7)` |
