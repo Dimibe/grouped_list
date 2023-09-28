@@ -109,7 +109,7 @@ class _SliverGroupedListViewState<T, E>
         (context, index) {
           var actualIndex = index ~/ 2;
 
-          if(widget.footer != null && index == _sortedElements.length * 2) {
+          if (widget.footer != null && index == _sortedElements.length * 2) {
             return widget.footer!;
           }
 
