@@ -326,7 +326,6 @@ class _GroupedListViewState<T, E> extends State<GroupedListView<T, E>> {
       alignment: Alignment.topCenter,
       children: <Widget>[
         ListView.builder(
-          key: widget.key,
           scrollDirection: widget.scrollDirection,
           controller: _controller,
           primary: widget.primary,
@@ -392,6 +391,10 @@ class _GroupedListViewState<T, E> extends State<GroupedListView<T, E>> {
   /// is not required since the group headers are displayed inside the lists and
   /// do not need to be always in the visible frame.
   void _scrollListener() {
+    if (_sortedElements.isEmpty) {
+      return;
+    }
+
     _listBox ??= _key.currentContext?.findRenderObject() as RenderBox?;
     var listPos = _listBox?.localToGlobal(Offset.zero).dy ?? 0;
     _headerBox ??=
