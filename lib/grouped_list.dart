@@ -520,7 +520,7 @@ class _GroupedListViewState<T, E> extends State<GroupedListView<T, E>> {
     }
     return widget.groupStickyHeaderBuilder!(element);
   }
-  
+
   /// Checks if the list item with the given [key] is currently rendered in the
   /// view frame.
   bool _isListItemRendered(GlobalKey<State<StatefulWidget>> key) {
