@@ -40,6 +40,7 @@ import 'package:grouped_list/grouped_list.dart';
     useStickyGroupSeparators: true, // optional
     floatingHeader: true, // optional
     order: GroupedListOrder.ASC, // optional
+    footer: Text("Widget at the bottom of list"), // optional
   ),
 ```
 
@@ -58,6 +59,7 @@ import 'package:grouped_list/grouped_list.dart';
 | `groupComparator` | Can be used to define a custom sorting for the groups. Otherwise the natural sorting order is used | no | - |
 | `itemComparator` | Can be used to define a custom sorting for the elements inside each group. Otherwise the natural sorting order is used | no | - |
 | `order` | Change to `GroupedListOrder.DESC` to reverse the group sorting | no | `GroupedListOrder.ASC` |
+| `footer` | Widget at the bottom of the list | no | - |
 
 **Also the fields from `ListView.builder` can be used.** 
 

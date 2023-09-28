@@ -64,6 +64,9 @@ class SliverGroupedListView<T, E> extends StatefulWidget {
   /// Called to build separators for between each item in the list.
   final Widget separator;
 
+  /// Widget at the end of the list
+  final Widget? footer;
+
   /// Creates a [SliverGroupedListView]
   const SliverGroupedListView({
     Key? key,
@@ -78,6 +81,7 @@ class SliverGroupedListView<T, E> extends StatefulWidget {
     this.order = GroupedListOrder.ASC,
     this.sort = true,
     this.separator = const SizedBox.shrink(),
+    this.footer,
   })  : assert(itemBuilder != null || indexedItemBuilder != null),
         assert(groupSeparatorBuilder != null || groupHeaderBuilder != null),
         super(key: key);
@@ -98,24 +102,35 @@ class _SliverGroupedListViewState<T, E>
     isSeparator(int i) => i.isEven;
 
     return SliverList(
-        delegate: SliverChildBuilderDelegate((context, index) {
-      var actualIndex = index ~/ 2;
-      if (index == hiddenIndex) {
-        return Opacity(
-          opacity: 1,
-          child: _buildGroupSeparator(_sortedElements[actualIndex]),
-        );
-      }
-      if (isSeparator(index)) {
-        var curr = widget.groupBy(_sortedElements[actualIndex]);
-        var prev = widget.groupBy(_sortedElements[actualIndex - 1]);
-        if (prev != curr) {
-          return _buildGroupSeparator(_sortedElements[actualIndex]);
-        }
-        return widget.separator;
-      }
-      return _buildItem(context, actualIndex);
-    }, childCount: _sortedElements.length * 2));
+      delegate: SliverChildBuilderDelegate(
+        childCount: widget.footer == null
+            ? _sortedElements.length * 2
+            : (_sortedElements.length * 2) + 1,
+        (context, index) {
+          var actualIndex = index ~/ 2;
+
+          if (widget.footer != null && index == _sortedElements.length * 2) {
+            return widget.footer!;
+          }
+
+          if (index == hiddenIndex) {
+            return Opacity(
+              opacity: 1,
+              child: _buildGroupSeparator(_sortedElements[actualIndex]),
+            );
+          }
+          if (isSeparator(index)) {
+            var curr = widget.groupBy(_sortedElements[actualIndex]);
+            var prev = widget.groupBy(_sortedElements[actualIndex - 1]);
+            if (prev != curr) {
+              return _buildGroupSeparator(_sortedElements[actualIndex]);
+            }
+            return widget.separator;
+          }
+          return _buildItem(context, actualIndex);
+        },
+      ),
+    );
   }
 
   Container _buildItem(context, int actualIndex) {
