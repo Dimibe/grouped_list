@@ -8,7 +8,7 @@ import 'package:intl/intl.dart';
 
 void main() => runApp(const MyApp());
 
-DateTime initialReferenceDate = DateTime(2020, 6, 24, 9, 05);
+DateTime initialReferenceDate = DateTime(2023, 6, 24, 9, 05);
 DateTime _currentReferenceDate = initialReferenceDate;
 
 DateTime getCurrentReferenceDate(Duration duration){
