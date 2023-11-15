@@ -302,11 +302,9 @@ class _GroupedListViewState<T, E> extends State<GroupedListView<T, E>> {
     var hiddenIndex = widget.reverse ? _sortedElements.length * 2 - 1 : 0;
     var isSeparator = widget.reverse ? (int i) => i.isOdd : (int i) => i.isEven;
 
-    if (widget.reverse) {
-      _ambiguate(WidgetsBinding.instance)!.addPostFrameCallback((_) {
-        _scrollListener();
-      });
-    }
+    _ambiguate(WidgetsBinding.instance)!.addPostFrameCallback((_) {
+      _scrollListener();
+    });
 
     /// The itemBuilder function for this package divides the [index] by two
     /// because between each element a separator is displayed. Depending on the
