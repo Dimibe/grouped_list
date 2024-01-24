@@ -13,7 +13,7 @@ List _elements = [
 ];
 
 class MyApp extends StatelessWidget {
-  const MyApp({Key? key}) : super(key: key);
+  const MyApp({super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -54,8 +54,7 @@ class MyApp extends StatelessWidget {
           margin: const EdgeInsets.symmetric(horizontal: 10.0, vertical: 6.0),
           child: SizedBox(
             child: ListTile(
-              contentPadding:
-                  const EdgeInsets.symmetric(horizontal: 20.0, vertical: 10.0),
+              contentPadding: const EdgeInsets.symmetric(horizontal: 20.0, vertical: 10.0),
               leading: const Icon(Icons.account_circle),
               title: Text(element['name']),
               trailing: const Icon(Icons.arrow_forward),
