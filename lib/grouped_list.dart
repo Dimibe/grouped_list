@@ -67,6 +67,15 @@ class GroupedListView<T, E> extends StatefulWidget {
   final Widget Function(BuildContext context, T? previousElement,
       T currentElement, T? nextElement)? interdependentItemBuilder;
 
+  /// Called to build children for the list with additional information about
+  /// whether the item is at the start or end of a group.
+  ///
+  /// The [groupStart] parameter is `true` if the item is the first in its group.
+  /// The [groupEnd] parameter is `true` if the item is the last in its group.
+  final Widget Function(
+          BuildContext context, T element, bool groupStart, bool groupEnd)?
+      groupItemBuilder;
+
   /// Called to build children for the list with
   /// 0 <= element, index < elements.length
   final Widget Function(BuildContext context, T element, int index)?
@@ -222,6 +231,7 @@ class GroupedListView<T, E> extends StatefulWidget {
     this.groupStickyHeaderBuilder,
     this.emptyPlaceholder,
     this.itemBuilder,
+    this.groupItemBuilder,
     this.indexedItemBuilder,
     this.interdependentItemBuilder,
     this.itemComparator,
@@ -251,7 +261,8 @@ class GroupedListView<T, E> extends StatefulWidget {
     this.footer,
   })  : assert(itemBuilder != null ||
             indexedItemBuilder != null ||
-            interdependentItemBuilder != null),
+            interdependentItemBuilder != null ||
+            groupItemBuilder != null),
         assert(groupSeparatorBuilder != null || groupHeaderBuilder != null);
 
   @override
@@ -301,6 +312,7 @@ class _GroupedListViewState<T, E> extends State<GroupedListView<T, E>> {
     _sortedElements = _sortElements();
     var hiddenIndex = widget.reverse ? _sortedElements.length * 2 - 1 : 0;
     var isSeparator = widget.reverse ? (int i) => i.isOdd : (int i) => i.isEven;
+    isValidIndex(int i) => i >= 0 && i < _sortedElements.length;
 
     _ambiguate(WidgetsBinding.instance)!.addPostFrameCallback((_) {
       _scrollListener();
@@ -324,16 +336,22 @@ class _GroupedListViewState<T, E> extends State<GroupedListView<T, E>> {
           child: _buildGroupSeparator(_sortedElements[actualIndex]),
         );
       }
+      var curr = widget.groupBy(_sortedElements[actualIndex]);
+      var preIndex = actualIndex + (widget.reverse ? 1 : -1);
+      var prev = isValidIndex(preIndex)
+          ? widget.groupBy(_sortedElements[preIndex])
+          : null;
+      var nextIndex = actualIndex + (widget.reverse ? -1 : 1);
+      var next = isValidIndex(nextIndex)
+          ? widget.groupBy(_sortedElements[nextIndex])
+          : null;
       if (isSeparator(index)) {
-        var curr = widget.groupBy(_sortedElements[actualIndex]);
-        var prev = widget
-            .groupBy(_sortedElements[actualIndex + (widget.reverse ? 1 : -1)]);
         if (prev != curr) {
           return _buildGroupSeparator(_sortedElements[actualIndex]);
         }
         return widget.separator;
       }
-      return _buildItem(context, actualIndex);
+      return _buildItem(context, actualIndex, prev != curr, curr != next);
     }
 
     return Stack(
@@ -379,20 +397,35 @@ class _GroupedListViewState<T, E> extends State<GroupedListView<T, E>> {
   /// Returns the widget for element positioned at [index]. The widget is
   /// retrieved either by [widget.indexedItemBuilder], [widget.itemBuilder]
   /// or [widget.interdependentItemBuilder].
-  Widget _buildItem(context, int index) => KeyedSubtree(
+  Widget _buildItem(context, int index, bool groupStart, bool groupEnd) =>
+      KeyedSubtree(
         key: _keys.putIfAbsent('$index', () => GlobalKey()),
-        child: widget.indexedItemBuilder != null
-            ? widget.indexedItemBuilder!(context, _sortedElements[index], index)
-            : widget.interdependentItemBuilder != null
-                ? widget.interdependentItemBuilder!(
+        child: widget.groupItemBuilder != null
+            ? widget.groupItemBuilder!(
+                context,
+                _sortedElements[index],
+                groupStart,
+                groupEnd,
+              )
+            : widget.indexedItemBuilder != null
+                ? widget.indexedItemBuilder!(
                     context,
-                    index > 0 ? _sortedElements[index - 1] : null,
                     _sortedElements[index],
-                    index + 1 < _sortedElements.length
-                        ? _sortedElements[index + 1]
-                        : null,
+                    index,
                   )
-                : widget.itemBuilder!(context, _sortedElements[index]),
+                : widget.interdependentItemBuilder != null
+                    ? widget.interdependentItemBuilder!(
+                        context,
+                        index > 0 ? _sortedElements[index - 1] : null,
+                        _sortedElements[index],
+                        index + 1 < _sortedElements.length
+                            ? _sortedElements[index + 1]
+                            : null,
+                      )
+                    : widget.itemBuilder!(
+                        context,
+                        _sortedElements[index],
+                      ),
       );
 
   /// This scroll listener is added to the lists controller if
