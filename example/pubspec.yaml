@@ -1,7 +1,6 @@
 name: example
 description: grouped_list example.
 publish_to: 'none' 
-version: 2.0.0
 
 environment:
   sdk: ">=2.17.0 <4.0.0"

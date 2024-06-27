@@ -1,3 +1,15 @@
+## [6.0.0] - 27.06.2024
+### Features: 
+* feat: interdependent items builder [GH-175](https://github.com/Dimibe/grouped_list/pull/175)
+* feat: add groupStickyHeaderBuilder [GH-126](https://github.com/Dimibe/grouped_list/pull/126)
+* feat: added footer widget [GH-189](https://github.com/Dimibe/grouped_list/pull/189)
+* feat: group section style [GH-206](https://github.com/Dimibe/grouped_list/pull/206)
+
+### Bugfixes:
+* fix: distinct key parent child [GH-171](https://github.com/Dimibe/grouped_list/pull/171)
+* fix RangeError when _sortedElements is empty [GH-164](https://github.com/Dimibe/grouped_list/pull/164)
+* fix: wrong initial sticky header [GH-198](https://github.com/Dimibe/grouped_list/pull/198)
+
 ## [5.1.3] - 09.04.2023
 
 * Prepare for dart 3
