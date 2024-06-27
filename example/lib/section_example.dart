@@ -55,7 +55,7 @@ class MyApp extends StatelessWidget {
           child: SizedBox(
             child: ListTile(
               contentPadding:
-              const EdgeInsets.symmetric(horizontal: 20.0, vertical: 10.0),
+                  const EdgeInsets.symmetric(horizontal: 20.0, vertical: 10.0),
               leading: const Icon(Icons.account_circle),
               title: Text(element['name']),
               trailing: const Icon(Icons.arrow_forward),
@@ -72,7 +72,8 @@ class MyApp extends StatelessWidget {
         } else if (groupEnd) {
           shapeBorder = const RoundedRectangleBorder(
               borderRadius: BorderRadius.only(
-                  bottomLeft: Radius.circular(15), bottomRight: Radius.circular(15)));
+                  bottomLeft: Radius.circular(15),
+                  bottomRight: Radius.circular(15)));
         }
         return Card(
           elevation: 8.0,
@@ -81,7 +82,7 @@ class MyApp extends StatelessWidget {
           child: SizedBox(
             child: ListTile(
               contentPadding:
-              const EdgeInsets.symmetric(horizontal: 20.0, vertical: 10.0),
+                  const EdgeInsets.symmetric(horizontal: 20.0, vertical: 10.0),
               leading: const Icon(Icons.account_circle),
               title: Text(element['name']),
               trailing: const Icon(Icons.arrow_forward),
