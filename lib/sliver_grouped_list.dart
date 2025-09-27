@@ -132,7 +132,7 @@ class _SliverGroupedListViewState<T, E>
     );
   }
 
-  Container _buildItem(context, int actualIndex) {
+  Container _buildItem(BuildContext context, int actualIndex) {
     var key = GlobalKey();
     _keys['$actualIndex'] = key;
     return Container(

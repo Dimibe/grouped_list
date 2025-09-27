@@ -397,7 +397,7 @@ class _GroupedListViewState<T, E> extends State<GroupedListView<T, E>> {
   /// Returns the widget for element positioned at [index]. The widget is
   /// retrieved either by [widget.indexedItemBuilder], [widget.itemBuilder]
   /// or [widget.interdependentItemBuilder].
-  Widget _buildItem(context, int index, bool groupStart, bool groupEnd) =>
+  Widget _buildItem(BuildContext context, int index, bool groupStart, bool groupEnd) =>
       KeyedSubtree(
         key: _keys.putIfAbsent('$index', () => GlobalKey()),
         child: widget.groupItemBuilder != null
