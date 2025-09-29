@@ -314,9 +314,10 @@ class _GroupedListViewState<T, E> extends State<GroupedListView<T, E>> {
     var isSeparator = widget.reverse ? (int i) => i.isOdd : (int i) => i.isEven;
     isValidIndex(int i) => i >= 0 && i < _sortedElements.length;
 
+     if (widget.useStickyGroupSeparators) {
     _ambiguate(WidgetsBinding.instance)!.addPostFrameCallback((_) {
       _scrollListener();
-    });
+    });}
 
     /// The itemBuilder function for this package divides the [index] by two
     /// because between each element a separator is displayed. Depending on the
