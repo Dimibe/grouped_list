@@ -386,7 +386,19 @@ class _GroupedListViewState<T, E> extends State<GroupedListView<T, E>> {
             initialData: _topElementIndex,
             builder: (context, snapshot) {
               if (snapshot.hasData) {
-                return _showFixedGroupHeader(snapshot.data!);
+                return ListenableBuilder(
+                  listenable: _controller,
+                  builder: (context, child) {
+                    final offset = _controller.offset;
+
+                    return Padding(
+                      padding:
+                          EdgeInsets.only(top: offset < 0 ? offset.abs() : 0),
+                      child: child,
+                    );
+                  },
+                  child: _showFixedGroupHeader(snapshot.data!),
+                );
               }
               return const SizedBox.shrink();
             }),
