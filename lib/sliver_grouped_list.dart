@@ -1,4 +1,5 @@
 import 'dart:collection';
+
 import 'package:flutter/widgets.dart';
 
 import 'src/grouped_list_order.dart';
@@ -67,6 +68,9 @@ class SliverGroupedListView<T, E> extends StatefulWidget {
   /// Widget at the end of the list
   final Widget? footer;
 
+  /// How much space to place between each group.
+  final double? groupSpacing;
+
   /// Creates a [SliverGroupedListView]
   const SliverGroupedListView({
     super.key,
@@ -82,6 +86,7 @@ class SliverGroupedListView<T, E> extends StatefulWidget {
     this.sort = true,
     this.separator = const SizedBox.shrink(),
     this.footer,
+    this.groupSpacing,
   })  : assert(itemBuilder != null || indexedItemBuilder != null),
         assert(groupSeparatorBuilder != null || groupHeaderBuilder != null);
 
@@ -122,6 +127,12 @@ class _SliverGroupedListViewState<T, E>
             var curr = widget.groupBy(_sortedElements[actualIndex]);
             var prev = widget.groupBy(_sortedElements[actualIndex - 1]);
             if (prev != curr) {
+              if (widget.groupSpacing != null) {
+                return Padding(
+                  padding: EdgeInsets.only(top: widget.groupSpacing!),
+                  child: _buildGroupSeparator(_sortedElements[actualIndex]),
+                );
+              }
               return _buildGroupSeparator(_sortedElements[actualIndex]);
             }
             return widget.separator;

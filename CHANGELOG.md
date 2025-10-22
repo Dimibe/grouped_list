@@ -1,3 +1,7 @@
+## [6.0.1] - 27.06.2025
+### Features:
+* Add `groupSpacing` to easy create space between each group.
+
 ## [6.0.0] - 27.06.2024
 ### Features: 
 * feat: interdependent items builder [GH-175](https://github.com/Dimibe/grouped_list/pull/175)

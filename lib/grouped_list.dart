@@ -213,6 +213,9 @@ class GroupedListView<T, E> extends StatefulWidget {
   /// Widget to be placed at the bottom of the list.
   final Widget? footer;
 
+  /// How much space to place between each group.
+  final double? groupSpacing;
+
   /// Creates a [GroupedListView].
   /// This constructor requires that [elements] and [groupBy] are provieded.
   /// [elements] defines a list of elements which are displayed in the list and
@@ -259,6 +262,7 @@ class GroupedListView<T, E> extends StatefulWidget {
     this.semanticChildCount,
     this.itemExtent,
     this.footer,
+    this.groupSpacing,
   })  : assert(itemBuilder != null ||
             indexedItemBuilder != null ||
             interdependentItemBuilder != null ||
@@ -347,6 +351,12 @@ class _GroupedListViewState<T, E> extends State<GroupedListView<T, E>> {
           : null;
       if (isSeparator(index)) {
         if (prev != curr) {
+          if (widget.groupSpacing != null) {
+            return Padding(
+              padding: EdgeInsets.only(top: widget.groupSpacing!),
+              child: _buildGroupSeparator(_sortedElements[actualIndex]),
+            );
+          }
           return _buildGroupSeparator(_sortedElements[actualIndex]);
         }
         return widget.separator;
