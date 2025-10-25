@@ -60,7 +60,8 @@ class GroupedListView<T, E> extends StatefulWidget {
 
   /// Called to build children for the list with
   /// 0 <= element < elements.length.
-  final Widget Function(BuildContext context, T element)? itemBuilder;
+  final Widget Function(BuildContext context, T element, T? prevElement)?
+      itemBuilder;
 
   /// Called to build the children for the list where the current element
   /// depends of the previous and next elements
@@ -290,7 +291,11 @@ class _GroupedListViewState<T, E> extends State<GroupedListView<T, E>> {
   void initState() {
     _controller = widget.controller ?? ScrollController();
     if (widget.useStickyGroupSeparators) {
-      _controller.addListener(_scrollListener);
+      _controller.addListener(() {
+        WidgetsBinding.instance.addPostFrameCallback((_) {
+          _scrollListener();
+        });
+      });
     }
     super.initState();
   }
@@ -426,6 +431,7 @@ class _GroupedListViewState<T, E> extends State<GroupedListView<T, E>> {
                     : widget.itemBuilder!(
                         context,
                         _sortedElements[index],
+                        index > 0 ? _sortedElements[index - 1] : null,
                       ),
       );
 

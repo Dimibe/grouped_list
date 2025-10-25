@@ -15,7 +15,7 @@ List<Element> _elements = [];
 int counter = 1;
 
 class MyApp extends StatelessWidget {
-  const MyApp({Key? key}) : super(key: key);
+  const MyApp({super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -57,7 +57,7 @@ class MyApp extends StatelessWidget {
       order: GroupedListOrder.DESC,
       useStickyGroupSeparators: true,
       groupSeparatorBuilder: (int groupValue) => _createGroupHeader(groupValue),
-      itemBuilder: (ctx, element) => _createItem(element.name),
+      itemBuilder: (ctx, element, prevElement) => _createItem(element.name),
     );
   }
 

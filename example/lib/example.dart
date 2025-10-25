@@ -13,7 +13,7 @@ List _elements = [
 ];
 
 class MyApp extends StatelessWidget {
-  const MyApp({Key? key}) : super(key: key);
+  const MyApp({super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -48,7 +48,7 @@ class MyApp extends StatelessWidget {
           style: const TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
         ),
       ),
-      itemBuilder: (c, element) {
+      itemBuilder: (c, element, prevElement) {
         return Card(
           elevation: 8.0,
           margin: const EdgeInsets.symmetric(horizontal: 10.0, vertical: 6.0),

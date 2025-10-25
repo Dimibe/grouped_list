@@ -1,5 +1,4 @@
 import 'dart:async';
-import 'dart:math';
 
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -97,7 +96,7 @@ List<Message> get getOlderMessages => [
     ];
 
 class MyApp extends StatefulWidget {
-  const MyApp({Key? key}) : super(key: key);
+  const MyApp({super.key});
 
   @override
   State<MyApp> createState() => _MyAppState();
@@ -268,7 +267,7 @@ class _ChatTimelineState extends State<ChatTimeline> {
 }
 
 class FakeMessageTextField extends StatelessWidget {
-  const FakeMessageTextField({Key? key}) : super(key: key);
+  const FakeMessageTextField({super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -302,12 +301,12 @@ class FakeMessageTextField extends StatelessWidget {
             maxLines: 8,
             decoration: InputDecoration(
               prefixIcon: IconButton(
-                onPressed: () => null,
+                onPressed: () {},
                 icon: Icon(Icons.camera_alt_outlined,
                     color: Theme.of(context).primaryColor),
               ),
               suffixIcon: IconButton(
-                onPressed: () => null,
+                onPressed: () {},
                 icon: Icon(Icons.send, color: Theme.of(context).primaryColor),
               ),
             ),

@@ -26,7 +26,7 @@ void main() {
             order: GroupedListOrder.ASC,
             groupSeparatorBuilder: (dynamic element) =>
                 SizedBox(height: 50, child: Text('$element')),
-            itemBuilder: (_, dynamic element) => SizedBox(
+            itemBuilder: (_, dynamic element, dynamic prevElement) => SizedBox(
               height: 100,
               child: Text(element['name']),
             ),
