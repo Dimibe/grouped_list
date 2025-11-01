@@ -212,6 +212,7 @@ class GroupedListView<T, E> extends StatefulWidget {
 
   /// Widget to be placed at the bottom of the list.
   final Widget? footer;
+  final Widget Function(Widget child)? wrapper;
 
   /// Creates a [GroupedListView].
   /// This constructor requires that [elements] and [groupBy] are provieded.
@@ -259,6 +260,7 @@ class GroupedListView<T, E> extends StatefulWidget {
     this.semanticChildCount,
     this.itemExtent,
     this.footer,
+    this.wrapper,
   })  : assert(itemBuilder != null ||
             indexedItemBuilder != null ||
             interdependentItemBuilder != null ||
@@ -354,33 +356,35 @@ class _GroupedListViewState<T, E> extends State<GroupedListView<T, E>> {
       return _buildItem(context, actualIndex, prev != curr, curr != next);
     }
 
+    final listView = ListView.builder(
+      scrollDirection: widget.scrollDirection,
+      controller: _controller,
+      primary: widget.primary,
+      physics: widget.physics,
+      shrinkWrap: widget.shrinkWrap,
+      padding: widget.padding,
+      reverse: widget.reverse,
+      clipBehavior: widget.clipBehavior,
+      dragStartBehavior: widget.dragStartBehavior,
+      itemExtent: widget.itemExtent,
+      restorationId: widget.restorationId,
+      keyboardDismissBehavior: widget.keyboardDismissBehavior,
+      semanticChildCount: widget.semanticChildCount,
+      itemCount: widget.footer == null
+          ? _sortedElements.length * 2
+          : (_sortedElements.length * 2) + 1,
+      addAutomaticKeepAlives: widget.addAutomaticKeepAlives,
+      addRepaintBoundaries: widget.addRepaintBoundaries,
+      addSemanticIndexes: widget.addSemanticIndexes,
+      cacheExtent: widget.cacheExtent,
+      itemBuilder: itemBuilder,
+    );
+    final wrapper = widget.wrapper;
     return Stack(
       key: _key,
       alignment: Alignment.topCenter,
       children: <Widget>[
-        ListView.builder(
-          scrollDirection: widget.scrollDirection,
-          controller: _controller,
-          primary: widget.primary,
-          physics: widget.physics,
-          shrinkWrap: widget.shrinkWrap,
-          padding: widget.padding,
-          reverse: widget.reverse,
-          clipBehavior: widget.clipBehavior,
-          dragStartBehavior: widget.dragStartBehavior,
-          itemExtent: widget.itemExtent,
-          restorationId: widget.restorationId,
-          keyboardDismissBehavior: widget.keyboardDismissBehavior,
-          semanticChildCount: widget.semanticChildCount,
-          itemCount: widget.footer == null
-              ? _sortedElements.length * 2
-              : (_sortedElements.length * 2) + 1,
-          addAutomaticKeepAlives: widget.addAutomaticKeepAlives,
-          addRepaintBoundaries: widget.addRepaintBoundaries,
-          addSemanticIndexes: widget.addSemanticIndexes,
-          cacheExtent: widget.cacheExtent,
-          itemBuilder: itemBuilder,
-        ),
+        wrapper != null ? wrapper(listView) : listView,
         StreamBuilder<int>(
             stream: _streamController.stream,
             initialData: _topElementIndex,
