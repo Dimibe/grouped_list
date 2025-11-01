@@ -210,6 +210,9 @@ class GroupedListView<T, E> extends StatefulWidget {
   /// the scroll position changes drastically.
   final double? itemExtent;
 
+  /// Widget to be placed at the top of the list.
+  final Widget? header;
+
   /// Widget to be placed at the bottom of the list.
   final Widget? footer;
 
@@ -258,6 +261,7 @@ class GroupedListView<T, E> extends StatefulWidget {
     this.restorationId,
     this.semanticChildCount,
     this.itemExtent,
+    this.header,
     this.footer,
   })  : assert(itemBuilder != null ||
             indexedItemBuilder != null ||
@@ -326,11 +330,15 @@ class _GroupedListViewState<T, E> extends State<GroupedListView<T, E>> {
     /// If the [index] points to an separator and the previous and next items
     /// are in different groups, a group header widget is displayed.
     Widget itemBuilder(context, index) {
-      if (widget.footer != null && index == _sortedElements.length * 2) {
+      if (widget.header != null && index == 0) {
+        return widget.header!;
+      }
+      if (widget.footer != null && index == _itemCount() - 1) {
         return widget.footer!;
       }
-      var actualIndex = index ~/ 2;
-      if (index == hiddenIndex) {
+      var indexWithoutHeader = index - (widget.header != null ? 1 : 0);
+      var actualIndex = indexWithoutHeader ~/ 2;
+      if (indexWithoutHeader == hiddenIndex) {
         return Opacity(
           opacity: widget.useStickyGroupSeparators ? 0 : 1,
           child: _buildGroupSeparator(_sortedElements[actualIndex]),
@@ -345,7 +353,7 @@ class _GroupedListViewState<T, E> extends State<GroupedListView<T, E>> {
       var next = isValidIndex(nextIndex)
           ? widget.groupBy(_sortedElements[nextIndex])
           : null;
-      if (isSeparator(index)) {
+      if (isSeparator(indexWithoutHeader)) {
         if (prev != curr) {
           return _buildGroupSeparator(_sortedElements[actualIndex]);
         }
@@ -372,9 +380,7 @@ class _GroupedListViewState<T, E> extends State<GroupedListView<T, E>> {
           restorationId: widget.restorationId,
           keyboardDismissBehavior: widget.keyboardDismissBehavior,
           semanticChildCount: widget.semanticChildCount,
-          itemCount: widget.footer == null
-              ? _sortedElements.length * 2
-              : (_sortedElements.length * 2) + 1,
+          itemCount: _itemCount(),
           addAutomaticKeepAlives: widget.addAutomaticKeepAlives,
           addRepaintBoundaries: widget.addRepaintBoundaries,
           addSemanticIndexes: widget.addSemanticIndexes,
@@ -392,6 +398,10 @@ class _GroupedListViewState<T, E> extends State<GroupedListView<T, E>> {
             }),
       ],
     );
+  }
+
+  int _itemCount() {
+    return _sortedElements.length * 2 + (widget.footer == null ? 0 : 1) + (widget.header == null ? 0 : 1);
   }
 
   /// Returns the widget for element positioned at [index]. The widget is
