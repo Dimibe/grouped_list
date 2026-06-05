@@ -310,6 +310,12 @@ class _GroupedListViewState<T, E> extends State<GroupedListView<T, E>> {
   @override
   Widget build(BuildContext context) {
     _sortedElements = _sortElements();
+
+    // If the list is empty, try using the emptyPlaceholder; otherwise, just use a SizedBox.
+    if (_sortedElements.isEmpty) {
+      return widget.emptyPlaceholder ?? const SizedBox.shrink();
+    }
+
     var hiddenIndex = widget.reverse ? _sortedElements.length * 2 - 1 : 0;
     var isSeparator = widget.reverse ? (int i) => i.isOdd : (int i) => i.isEven;
     isValidIndex(int i) => i >= 0 && i < _sortedElements.length;
